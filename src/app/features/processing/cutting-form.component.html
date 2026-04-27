@@ -1,0 +1,82 @@
+<section class="card step-card" *ngIf="process as currentProcess">
+  <header class="card-header">
+    <div>
+      <h2>Cutting Step</h2>
+      <p>Record machine, operator, and output splits for kernel recovery.</p>
+    </div>
+    <span class="status-badge" [ngClass]="currentProcess.cutting.status.toLowerCase().replace('_', '-')">
+      {{ currentProcess.cutting.status === 'IN_PROGRESS' ? 'In Progress' : (currentProcess.cutting.status | titlecase) }}
+    </span>
+  </header>
+
+  <form class="form-grid" [formGroup]="form">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Machine ID</mat-label>
+      <input matInput formControlName="machineId" />
+      <mat-error *ngIf="form.controls.machineId.hasError('required')">Machine ID is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Operator</mat-label>
+      <input matInput formControlName="operator" />
+      <mat-error *ngIf="form.controls.operator.hasError('required')">Operator is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Input Weight (kg)</mat-label>
+      <input matInput formControlName="inputWeight" />
+    </mat-form-field>
+
+    <div class="yield-panel">
+      <div class="metric-card highlight">
+        <span class="metric-label">Yield %</span>
+        <strong class="metric-value">{{ yieldPercentage | number:'1.1-1' }}%</strong>
+      </div>
+
+      <div class="metric-card loss">
+        <span class="metric-label">Loss %</span>
+        <strong class="metric-value">{{ lossPercentage | number:'1.1-1' }}%</strong>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Kernel Weight (kg)</mat-label>
+      <input matInput type="number" formControlName="kernelWeight" />
+      <mat-error *ngIf="form.controls.kernelWeight.hasError('required')">Kernel weight is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Shell Weight (kg)</mat-label>
+      <input matInput type="number" formControlName="shellWeight" />
+      <mat-error *ngIf="form.controls.shellWeight.hasError('required')">Shell weight is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Uncut Weight (kg)</mat-label>
+      <input matInput type="number" formControlName="uncutWeight" />
+      <mat-error *ngIf="form.controls.uncutWeight.hasError('required')">Uncut weight is required.</mat-error>
+    </mat-form-field>
+
+    <p class="validation-message" *ngIf="form.hasError('outputOverflow')">
+      Total output cannot exceed cutting input weight.
+    </p>
+  </form>
+
+  <div class="footer">
+    <div class="guard-note" [class.disabled]="currentProcess.boiling.status !== 'COMPLETED'">
+      {{ currentProcess.boiling.status === 'COMPLETED' ? 'Cutting unlocked after boiling completion.' : 'Complete boiling to unlock cutting.' }}
+    </div>
+
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="submitStart()" [disabled]="!canStart">
+        <mat-spinner *ngIf="saving && canStart" diameter="18"></mat-spinner>
+        <span>Start Cutting</span>
+      </button>
+
+      <button mat-flat-button color="primary" type="button" (click)="submitComplete()" [disabled]="!canComplete">
+        <mat-spinner *ngIf="saving && canComplete" diameter="18"></mat-spinner>
+        <span>Complete Cutting</span>
+      </button>
+    </div>
+  </div>
+</section>

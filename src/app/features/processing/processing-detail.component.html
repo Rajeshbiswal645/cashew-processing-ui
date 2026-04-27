@@ -1,0 +1,82 @@
+<section class="detail-page" *ngIf="!isLoading; else loadingState">
+  <header class="page-header" *ngIf="process as currentProcess">
+    <div>
+      <button mat-button type="button" class="back-link" routerLink="/processing">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Processing
+      </button>
+      <h1>{{ currentProcess.id }}</h1>
+      <p>Manage boiling and cutting operations</p>
+    </div>
+  </header>
+
+  <section class="summary-grid" *ngIf="process as currentProcess">
+    <article class="card summary-card">
+      <span class="label">RCN Batch</span>
+      <strong>{{ currentProcess.rcnBatch.id }}</strong>
+      <p>{{ currentProcess.rcnBatch.supplier }} | {{ currentProcess.rcnBatch.origin }}</p>
+    </article>
+
+    <article class="card summary-card">
+      <span class="label">Input Weight</span>
+      <strong>{{ currentProcess.rcnBatch.inputWeight | number:'1.1-1' }} kg</strong>
+      <p>Received {{ currentProcess.rcnBatch.receivedDate }}</p>
+    </article>
+
+    <article class="card summary-card emphasis" *ngIf="currentProcess.cutting.status === 'COMPLETED'; else liveStage">
+      <span class="label">Final Yield</span>
+      <strong>{{ yieldPercentage | number:'1.1-1' }}%</strong>
+      <p>Loss {{ lossPercentage | number:'1.1-1' }}%</p>
+    </article>
+
+    <ng-template #liveStage>
+      <article class="card summary-card emphasis">
+        <span class="label">Current Stage</span>
+        <strong>{{ currentProcess.currentStage === 'COMPLETED' ? 'Completed' : (currentProcess.currentStage | titlecase) }}</strong>
+        <p>{{ currentProcess.status === 'IN_PROGRESS' ? 'In Progress' : (currentProcess.status | titlecase) }}</p>
+      </article>
+    </ng-template>
+  </section>
+
+  <section class="card flow-card" *ngIf="process">
+    <div class="flow-header">
+      <div>
+        <h2>Process Flow</h2>
+        <p>Only one stage is active at a time.</p>
+      </div>
+    </div>
+    <div class="step-flow">
+      <ng-container *ngFor="let step of steps; let last = last">
+        <div class="step-node" [class.current]="step.current">
+          <div class="step-dot" [ngClass]="step.status.toLowerCase()"></div>
+          <div class="step-copy">
+            <strong>{{ step.label }}</strong>
+            <span class="step-badge" [ngClass]="step.status.toLowerCase()">{{ step.status | titlecase }}</span>
+          </div>
+        </div>
+        <div class="step-connector" *ngIf="!last"></div>
+      </ng-container>
+    </div>
+  </section>
+
+  <app-boiling-form
+    [process]="process"
+    [saving]="isSavingBoiling"
+    (startBoiling)="saveBoilingStart($event)"
+    (completeBoiling)="saveBoilingComplete($event)"
+  ></app-boiling-form>
+
+  <app-cutting-form
+    [process]="process"
+    [saving]="isSavingCutting"
+    (startCutting)="saveCuttingStart($event)"
+    (completeCutting)="saveCuttingComplete($event)"
+  ></app-cutting-form>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading process details...</p>
+  </div>
+</ng-template>

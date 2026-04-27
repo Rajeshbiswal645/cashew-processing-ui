@@ -1,0 +1,52 @@
+<section class="drawer-shell">
+  <header class="drawer-header">
+    <div>
+      <h2>Record Payment</h2>
+      <p>Update receipt or payout details for the selected invoice.</p>
+    </div>
+
+    <button mat-icon-button type="button" (click)="closeDrawer.emit()" aria-label="Close drawer">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <form class="drawer-body" [formGroup]="form">
+    <div class="readonly-card" *ngIf="invoice">
+      <span>Invoice ID</span>
+      <strong>{{ invoice.id }}</strong>
+      <p>Balance {{ invoice.balanceAmount | number:'1.0-0' }}</p>
+    </div>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Payment Date</mat-label>
+      <input matInput type="date" formControlName="paymentDate" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Payment Mode</mat-label>
+      <mat-select formControlName="paymentMode">
+        <mat-option *ngFor="let mode of paymentModes" [value]="mode">
+          {{ mode === 'BANK_TRANSFER' ? 'Bank Transfer' : mode }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Amount Paid</mat-label>
+      <input matInput type="number" formControlName="amountPaid" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Reference Number</mat-label>
+      <input matInput formControlName="referenceNumber" />
+    </mat-form-field>
+  </form>
+
+  <footer class="drawer-footer">
+    <button mat-button type="button" (click)="closeDrawer.emit()">Cancel</button>
+    <button mat-flat-button color="primary" type="button" (click)="submit()" [disabled]="form.invalid || saving">
+      <mat-spinner *ngIf="saving" diameter="18"></mat-spinner>
+      <span>Submit Payment</span>
+    </button>
+  </footer>
+</section>

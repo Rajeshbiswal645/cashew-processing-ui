@@ -1,0 +1,78 @@
+<section class="payslip-page">
+  <div class="loading-state" *ngIf="isLoading; else payslipContent">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading payslip...</p>
+  </div>
+</section>
+
+<ng-template #payslipContent>
+  <ng-container *ngIf="detail; else emptyState">
+    <header class="page-header">
+      <div>
+        <h1>Payslip</h1>
+        <p>{{ detail.payroll.employeeName }} · {{ detail.payroll.month }}</p>
+      </div>
+
+      <button mat-stroked-button type="button" routerLink="/payroll">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Back to Payroll</span>
+      </button>
+    </header>
+
+    <section class="grid-shell">
+      <article class="card info-card">
+        <h3>Employee Info</h3>
+        <p><strong>Employee ID:</strong> {{ detail.employee.employeeId }}</p>
+        <p><strong>Department:</strong> {{ detail.employee.department }}</p>
+        <p><strong>Designation:</strong> {{ detail.employee.designation }}</p>
+        <p><strong>Bank Account:</strong> {{ detail.employee.bankAccount }}</p>
+      </article>
+
+      <article class="card info-card">
+        <h3>Attendance Summary</h3>
+        <p><strong>Total Days:</strong> {{ detail.attendanceSummary.totalDays }}</p>
+        <p><strong>Present:</strong> {{ detail.attendanceSummary.presentDays }}</p>
+        <p><strong>Absent:</strong> {{ detail.attendanceSummary.absentDays }}</p>
+        <p><strong>Leaves:</strong> {{ detail.attendanceSummary.leaveDays }}</p>
+        <p><strong>Half Days:</strong> {{ detail.attendanceSummary.halfDays }}</p>
+      </article>
+    </section>
+
+    <section class="card breakdown-card">
+      <h3>Salary Breakdown</h3>
+      <div class="breakdown-grid">
+        <div>
+          <span>Basic Salary</span>
+          <strong>{{ detail.payroll.basicSalary | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div>
+          <span>Allowances</span>
+          <strong>{{ detail.payroll.allowances | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div>
+          <span>Per Day Salary</span>
+          <strong>{{ detail.payroll.perDaySalary | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div>
+          <span>Attendance Deduction</span>
+          <strong>{{ detail.payroll.attendanceDeduction | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div>
+          <span>Other Deductions</span>
+          <strong>{{ detail.payroll.otherDeductions | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+        <div>
+          <span>Net Salary</span>
+          <strong class="highlight">{{ detail.payroll.netSalary | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+</ng-template>
+
+<ng-template #emptyState>
+  <section class="card empty-state">
+    <mat-icon>receipt_long</mat-icon>
+    <p>Payslip could not be loaded.</p>
+  </section>
+</ng-template>

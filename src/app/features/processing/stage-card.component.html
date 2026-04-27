@@ -1,0 +1,21 @@
+<button
+  type="button"
+  class="stage-card"
+  [class.active]="active"
+  [class.expanded]="expanded"
+  [class.locked]="!stage.enabled"
+  [class.completed]="stage.status === 'COMPLETED'"
+  [class.running]="stage.status === 'IN_PROGRESS'"
+  [class.pending]="stage.status === 'PENDING'"
+  (click)="stageSelect.emit()"
+>
+  <div class="card-copy">
+    <div class="stage-copy">
+      <span class="stage-name">{{ stage.name }}</span>
+      <span class="stage-status">{{ statusLabel }}</span>
+      <span class="stage-jobs">{{ stage.jobs.length }} batches</span>
+    </div>
+
+    <mat-icon class="stage-icon">{{ expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+  </div>
+</button>

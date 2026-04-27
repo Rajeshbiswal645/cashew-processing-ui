@@ -1,0 +1,132 @@
+<div class="boiling-container">
+  <h2 class="title">Boiling Batch Management</h2>
+
+  <!-- Expandable Form -->
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true" class="form-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ editIndex !== null ? 'Update Boiling Batch' : 'Add New Boiling Batch' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="boilingForm" class="boiling-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>RCN ID</mat-label>
+            <input matInput formControlName="rcn_id" placeholder="Enter RCN ID" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Input Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="input_weight" placeholder="Enter Input Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Start Time</mat-label>
+            <input matInput type="time" formControlName="start_time" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Time</mat-label>
+            <input matInput type="time" formControlName="end_time" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Temperature (°C)</mat-label>
+            <input type="number" matInput formControlName="temp" placeholder="Enter Temperature" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Operator</mat-label>
+            <mat-select formControlName="operator_id">
+              <mat-option *ngFor="let op of operatorList" [value]="op.id">
+                {{ op.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" (click)="submitForm()" [disabled]="boilingForm.invalid">
+            {{ editIndex !== null ? 'Update' : 'Add' }}
+          </button>
+          <button mat-stroked-button color="warn" (click)="resetForm()">Clear</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- Boiling Batches Table -->
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table [dataSource]="boilingList" class="full-table">
+      <ng-container matColumnDef="boiling_id">
+        <th mat-header-cell *matHeaderCellDef>Boiling ID</th>
+        <td mat-cell *matCellDef="let b">{{ b.boiling_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="rcn_id">
+        <th mat-header-cell *matHeaderCellDef>RCN ID</th>
+        <td mat-cell *matCellDef="let b">{{ b.rcn_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="input_weight">
+        <th mat-header-cell *matHeaderCellDef>Input Weight (kg)</th>
+        <td mat-cell *matCellDef="let b">{{ b.input_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="start_time">
+        <th mat-header-cell *matHeaderCellDef>Start Time</th>
+        <td mat-cell *matCellDef="let b">{{ b.start_time }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="end_time">
+        <th mat-header-cell *matHeaderCellDef>End Time</th>
+        <td mat-cell *matCellDef="let b">{{ b.end_time }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="temp">
+        <th mat-header-cell *matHeaderCellDef>Temperature (°C)</th>
+        <td mat-cell *matCellDef="let b">{{ b.temp }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="operator_id">
+        <th mat-header-cell *matHeaderCellDef>Operator</th>
+        <td mat-cell *matCellDef="let b">{{ getOperatorName(b.operator_id) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let b; let i = index">
+          <button mat-icon-button color="accent" (click)="editBoiling(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteBoiling(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-stroked-button color="primary" (click)="startCutting(b)">Start Cutting</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <!-- Cutting batches for preview -->
+  <div class="table-wrapper mat-elevation-z4 mt-3" *ngIf="cuttingList.length">
+    <h4>Cutting Batches (Generated)</h4>
+    <table mat-table [dataSource]="cuttingList" class="full-table">
+      <ng-container matColumnDef="cutting_id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let c">{{ c.cutting_id }}</td>
+      </ng-container>
+      <ng-container matColumnDef="kernel_weight">
+        <th mat-header-cell *matHeaderCellDef>Kernel</th>
+        <td mat-cell *matCellDef="let c">{{ c.kernel_weight }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="['cutting_id','kernel_weight']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['cutting_id','kernel_weight'];"></tr>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,112 @@
+<section class="workflow-page">
+  <header class="page-header">
+    <div>
+      <h1>QC Inspection</h1>
+      <p>Review and approve RCN batches</p>
+    </div>
+  </header>
+
+  <mat-drawer-container class="workspace-shell" autosize>
+    <mat-drawer-content>
+      <section class="card filter-card">
+        <form class="filters-grid" [formGroup]="filtersForm">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search</mat-label>
+            <input matInput formControlName="search" placeholder="Search by RCN ID / Vendor" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </section>
+
+      <section class="card table-card">
+        <div class="table-wrap" *ngIf="!isLoading; else loadingState">
+          <table mat-table [dataSource]="dataSource" matSort class="erp-table">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>RCN ID</th>
+              <td mat-cell *matCellDef="let row"><strong>{{ row.id }}</strong></td>
+            </ng-container>
+
+            <ng-container matColumnDef="vendor">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor</th>
+              <td mat-cell *matCellDef="let row">{{ row.vendor }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="origin">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Origin</th>
+              <td mat-cell *matCellDef="let row">{{ row.origin }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="netWeight">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Net Weight</th>
+              <td mat-cell *matCellDef="let row" class="metric-cell">{{ row.netWeight | number:'1.0-0' }} kg</td>
+            </ng-container>
+
+            <ng-container matColumnDef="moistureBefore">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Moisture Before (%)</th>
+              <td mat-cell *matCellDef="let row" class="metric-cell">
+                {{ (row.moistureBefore ?? 0) | number:'1.1-1' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>QC Status</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="status-badge" [ngClass]="getStatusClass(row.status)">{{ getStatusLabel(row.status) }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let row">
+                <div class="actions-cell">
+                  <button mat-flat-button color="primary" type="button" (click)="openInspect(row)">Inspect</button>
+                  <button mat-icon-button type="button" aria-label="View batch" (click)="openView(row)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <div class="empty-state" *ngIf="emptyState">
+            <mat-icon>fact_check</mat-icon>
+            <p>No QC batches match the current filters.</p>
+          </div>
+        </div>
+      </section>
+    </mat-drawer-content>
+
+    <mat-drawer class="form-drawer" mode="over" position="end" [opened]="isDrawerOpen" (closedStart)="closeDrawer()">
+      <app-qc-inspection-drawer
+        [batch]="selectedBatch"
+        [saving]="isSaving"
+        [readOnly]="isReadOnly"
+        (closeDrawer)="closeDrawer()"
+        (inspect)="saveInspection($event)"
+      ></app-qc-inspection-drawer>
+    </mat-drawer>
+  </mat-drawer-container>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading QC batches...</p>
+  </div>
+</ng-template>

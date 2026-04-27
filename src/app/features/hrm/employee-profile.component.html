@@ -1,0 +1,136 @@
+<section class="profile-page">
+  <div class="loading-state" *ngIf="isLoading; else profileContent">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading employee profile...</p>
+  </div>
+</section>
+
+<ng-template #profileContent>
+  <ng-container *ngIf="employee; else missingState">
+    <header class="page-header">
+      <div>
+        <h1>Employee Profile</h1>
+        <p>View employee details, attendance, leave, and salary information</p>
+      </div>
+    </header>
+
+    <section class="card profile-card">
+      <div class="identity-block">
+        <span class="avatar">{{ employee.firstName.charAt(0) }}{{ employee.lastName.charAt(0) }}</span>
+        <div>
+          <h2>{{ fullName }}</h2>
+          <p>{{ employee.designation }}</p>
+        </div>
+      </div>
+
+      <div class="profile-meta">
+        <div>
+          <span>Department</span>
+          <strong>{{ employee.department }}</strong>
+        </div>
+        <div>
+          <span>Status</span>
+          <strong class="status-badge" [ngClass]="statusClass">{{ employee.status | titlecase }}</strong>
+        </div>
+        <div>
+          <span>Employee ID</span>
+          <strong>{{ employee.employeeId }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="card tabs-card">
+      <mat-tab-group>
+        <mat-tab label="Overview">
+          <div class="tab-grid">
+            <article class="info-card">
+              <h3>Contact Details</h3>
+              <p><strong>Email:</strong> {{ employee.email }}</p>
+              <p><strong>Phone:</strong> {{ employee.phone }}</p>
+              <p><strong>Date of Birth:</strong> {{ employee.dob }}</p>
+              <p><strong>Gender:</strong> {{ employee.gender }}</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Job Details</h3>
+              <p><strong>Designation:</strong> {{ employee.designation }}</p>
+              <p><strong>Department:</strong> {{ employee.department }}</p>
+              <p><strong>Joining Date:</strong> {{ employee.joiningDate }}</p>
+              <p><strong>Bank Account:</strong> {{ employee.bankAccount }}</p>
+            </article>
+
+            <article class="info-card metrics-card">
+              <h3>Quick Summary</h3>
+              <div class="metric-row">
+                <span>Present Days</span>
+                <strong>{{ presentDays }}</strong>
+              </div>
+              <div class="metric-row">
+                <span>Pending Leaves</span>
+                <strong>{{ pendingLeaves }}</strong>
+              </div>
+              <div class="metric-row">
+                <span>Net Salary</span>
+                <strong>{{ netSalary | currency:'INR':'symbol':'1.0-0' }}</strong>
+              </div>
+            </article>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Attendance">
+          <div class="list-card" *ngFor="let record of attendanceRecords">
+            <div>
+              <strong>{{ record.date }}</strong>
+              <p>{{ record.employeeName }}</p>
+            </div>
+            <span class="status-chip" [ngClass]="record.status.toLowerCase()">{{ record.status | titlecase }}</span>
+          </div>
+          <p class="tab-empty" *ngIf="attendanceRecords.length === 0">No attendance records available.</p>
+        </mat-tab>
+
+        <mat-tab label="Leave">
+          <div class="list-card" *ngFor="let record of leaveRecords">
+            <div>
+              <strong>{{ record.leaveType }}</strong>
+              <p>{{ record.fromDate }} to {{ record.toDate }}</p>
+              <small>{{ record.reason }}</small>
+            </div>
+            <span class="status-chip" [ngClass]="record.status.toLowerCase()">{{ record.status | titlecase }}</span>
+          </div>
+          <p class="tab-empty" *ngIf="leaveRecords.length === 0">No leave records available.</p>
+        </mat-tab>
+
+        <mat-tab label="Salary">
+          <article class="salary-card" *ngFor="let record of salaryRecords">
+            <div class="salary-grid">
+              <div>
+                <span>Basic Salary</span>
+                <strong>{{ record.basicSalary | currency:'INR':'symbol':'1.0-0' }}</strong>
+              </div>
+              <div>
+                <span>Allowances</span>
+                <strong>{{ record.allowances | currency:'INR':'symbol':'1.0-0' }}</strong>
+              </div>
+              <div>
+                <span>Deductions</span>
+                <strong>{{ record.deductions | currency:'INR':'symbol':'1.0-0' }}</strong>
+              </div>
+              <div>
+                <span>Net Salary</span>
+                <strong>{{ record.netSalary | currency:'INR':'symbol':'1.0-0' }}</strong>
+              </div>
+            </div>
+          </article>
+          <p class="tab-empty" *ngIf="salaryRecords.length === 0">No salary records available.</p>
+        </mat-tab>
+      </mat-tab-group>
+    </section>
+  </ng-container>
+</ng-template>
+
+<ng-template #missingState>
+  <section class="card empty-state">
+    <mat-icon>person_off</mat-icon>
+    <p>Employee profile could not be loaded.</p>
+  </section>
+</ng-template>

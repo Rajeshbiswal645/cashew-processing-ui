@@ -1,0 +1,44 @@
+<section class="drawer-shell">
+  <header class="drawer-header">
+    <div>
+      <p class="eyebrow">Batch Trace</p>
+      <h2>{{ batchId }}</h2>
+      <p class="drawer-subtitle">Track movement through the processing chain</p>
+    </div>
+
+    <button mat-icon-button type="button" aria-label="Close trace drawer" (click)="closeDrawer.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="drawer-body">
+    <div class="loading-state" *ngIf="loading">
+      <mat-icon>hourglass_top</mat-icon>
+      <p>Loading batch trace...</p>
+    </div>
+
+    <div class="timeline" *ngIf="!loading && steps.length">
+      <div class="timeline-item" *ngFor="let step of steps; let isLast = last">
+        <div class="timeline-marker" [class.last]="isLast"></div>
+
+        <div class="timeline-card">
+          <div class="timeline-head">
+            <h3>{{ step.stage }}</h3>
+            <span class="status-chip">{{ step.status }}</span>
+          </div>
+          <p>{{ step.date }}</p>
+          <strong>{{ step.quantity | number:'1.0-0' }} kg</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && !steps.length">
+      <mat-icon>timeline</mat-icon>
+      <p>No trace events available for this batch.</p>
+    </div>
+  </div>
+
+  <footer class="drawer-actions">
+    <button mat-stroked-button type="button" (click)="closeDrawer.emit()">Close</button>
+  </footer>
+</section>

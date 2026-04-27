@@ -1,0 +1,137 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.drawer-shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f8faff;
+}
+
+.drawer-header {
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid #e4eaf4;
+  background: #ffffff;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5f7dc3;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #233a67;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.form-card {
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid #e7edf6;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(31, 58, 112, 0.05);
+}
+
+.section-heading {
+  margin-bottom: 16px;
+}
+
+.section-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2b416f;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+mat-form-field,
+.full-width {
+  width: 100%;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.net-weight-card {
+  min-height: 112px;
+  padding: 18px;
+  border-radius: 8px;
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  background: #f0f5ff;
+  border: 1px solid #d7e3fb;
+}
+
+.net-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6680b7;
+}
+
+.net-weight-card strong {
+  font-size: 1.65rem;
+  color: #1f4dac;
+}
+
+.net-weight-card small {
+  color: #7286ad;
+}
+
+.drawer-actions {
+  padding: 16px 20px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #e4eaf4;
+  background: #ffffff;
+}
+
+.drawer-actions button[mat-flat-button] {
+  min-width: 130px;
+}
+
+.drawer-actions button[mat-flat-button] .mdc-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .drawer-body,
+  .drawer-header,
+  .drawer-actions {
+    padding-inline: 16px;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+}

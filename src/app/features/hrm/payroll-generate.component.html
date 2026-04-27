@@ -1,0 +1,41 @@
+<section class="generate-page">
+  <header class="page-header">
+    <div>
+      <h1>Generate Payroll</h1>
+      <p>Select month and employee scope to generate payroll records</p>
+    </div>
+
+    <button mat-stroked-button type="button" routerLink="/payroll">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back to Payroll</span>
+    </button>
+  </header>
+
+  <section class="card form-card">
+    <form class="form-grid" [formGroup]="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Select Month</mat-label>
+        <mat-select formControlName="month">
+          <mat-option *ngFor="let month of months" [value]="month">{{ month }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Select Employee / All</mat-label>
+        <mat-select formControlName="employeeId">
+          <mat-option value="ALL">All Active Employees</mat-option>
+          <mat-option *ngFor="let employee of employees" [value]="employee.employeeId">
+            {{ employee.firstName }} {{ employee.lastName }} ({{ employee.employeeId }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <footer class="form-footer">
+      <button mat-flat-button color="primary" type="button" [disabled]="isSubmitting" (click)="generate()">
+        <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
+        <span>Generate Payroll</span>
+      </button>
+    </footer>
+  </section>
+</section>

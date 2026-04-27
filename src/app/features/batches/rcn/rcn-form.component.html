@@ -1,0 +1,154 @@
+<div class="drawer-shell" [class.open]="open">
+  <header class="drawer-header">
+    <div>
+      <p class="eyebrow">RCN Intake</p>
+      <h2>{{ drawerTitle }}</h2>
+    </div>
+
+    <button mat-icon-button type="button" (click)="close()" aria-label="Close RCN form">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <form class="drawer-body" [formGroup]="form">
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>Vendor Details</h3>
+      </div>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Vendor</mat-label>
+          <mat-select formControlName="vendorId">
+            <mat-option *ngFor="let vendor of vendors" [value]="vendor.id">{{ vendor.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls.vendorId.touched && form.controls.vendorId.hasError('required')">
+            Vendor is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contract</mat-label>
+          <mat-select formControlName="contract">
+            <mat-option value="">No contract</mat-option>
+            <mat-option *ngFor="let contract of vendorContracts" [value]="contract">{{ contract }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Origin</mat-label>
+          <mat-select formControlName="origin">
+            <mat-option *ngFor="let origin of vendorOrigins" [value]="origin">{{ origin }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls.origin.touched && form.controls.origin.hasError('required')">
+            Origin is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>Transport Details</h3>
+      </div>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Truck ID</mat-label>
+          <input matInput formControlName="truckId" placeholder="KA-01-TC-4498" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Driver Name</mat-label>
+          <input matInput formControlName="driverName" placeholder="Driver name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Driver Phone</mat-label>
+          <input matInput formControlName="driverPhone" placeholder="9876543210" />
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>Weight Details</h3>
+      </div>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Gross Weight (kg)</mat-label>
+          <input matInput type="number" min="0" formControlName="grossWeight" />
+          <mat-error *ngIf="form.controls.grossWeight.touched && form.controls.grossWeight.hasError('required')">
+            Gross weight is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tare Weight (kg)</mat-label>
+          <input matInput type="number" min="0" formControlName="tareWeight" />
+          <mat-error *ngIf="form.controls.tareWeight.touched && form.controls.tareWeight.hasError('required')">
+            Tare weight is required.
+          </mat-error>
+          <mat-error *ngIf="form.controls.tareWeight.touched && form.controls.tareWeight.hasError('exceedsGross')">
+            Tare weight cannot exceed gross weight.
+          </mat-error>
+        </mat-form-field>
+
+        <div class="net-weight-card">
+          <span class="net-label">Net Weight</span>
+          <strong>{{ netWeight | number:'1.0-0' }} kg</strong>
+          <small>Calculated automatically</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>QC Preview</h3>
+      </div>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Moisture Before (%)</mat-label>
+          <input matInput type="number" min="0" step="0.1" formControlName="moistureBefore" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Moisture After (%)</mat-label>
+          <input matInput type="number" min="0" step="0.1" formControlName="moistureAfter" />
+        </mat-form-field>
+      </div>
+
+      <mat-checkbox formControlName="requiresDrying">Requires Drying</mat-checkbox>
+    </section>
+
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>Additional Info</h3>
+      </div>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Procurement Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="procurementDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Remarks</mat-label>
+          <textarea matInput rows="4" formControlName="remarks" placeholder="Inspection or unloading notes"></textarea>
+        </mat-form-field>
+      </div>
+    </section>
+  </form>
+
+  <footer class="drawer-actions">
+    <button mat-stroked-button type="button" (click)="close()">Cancel</button>
+    <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="submit()">
+      <mat-spinner *ngIf="saving" diameter="18"></mat-spinner>
+      <span>{{ saving ? 'Saving...' : 'Save RCN' }}</span>
+    </button>
+  </footer>
+</div>

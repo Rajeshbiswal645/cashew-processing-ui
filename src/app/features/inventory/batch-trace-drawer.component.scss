@@ -1,0 +1,145 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.drawer-shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fb;
+}
+
+.drawer-header {
+  padding: 20px 20px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #e4eaf3;
+  background: #ffffff;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5a79c0;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #223a66;
+}
+
+.drawer-subtitle {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+.timeline {
+  display: grid;
+  gap: 14px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 14px;
+}
+
+.timeline-marker {
+  position: relative;
+  width: 20px;
+}
+
+.timeline-marker::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: -20px;
+  width: 2px;
+  background: #c8d5ea;
+}
+
+.timeline-marker::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #2f5cc6;
+  box-shadow: 0 0 0 4px #e9f0ff;
+}
+
+.timeline-marker.last::before {
+  display: none;
+}
+
+.timeline-card {
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid #e5ebf4;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(26, 52, 104, 0.05);
+}
+
+.timeline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.timeline-card h3 {
+  margin: 0;
+  color: #233a67;
+}
+
+.timeline-card p {
+  margin: 8px 0 6px;
+  color: #6f83a7;
+}
+
+.timeline-card strong {
+  color: #223a66;
+}
+
+.status-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #2956b6;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.loading-state,
+.empty-state {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  color: #7386a8;
+  text-align: center;
+}
+
+.drawer-actions {
+  padding: 16px 20px 20px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #e4eaf3;
+  background: #ffffff;
+}

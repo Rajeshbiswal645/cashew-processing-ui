@@ -1,0 +1,169 @@
+<section class="hrm-page">
+  <header class="page-header">
+    <div>
+      <h1>Leave Management</h1>
+      <p>Apply leave requests and manage approval workflows</p>
+    </div>
+
+    <button mat-flat-button color="primary" type="button" (click)="openDrawer()">
+      <mat-icon>event_available</mat-icon>
+      <span>Apply Leave</span>
+    </button>
+  </header>
+
+  <mat-drawer-container class="workspace-shell" autosize>
+    <mat-drawer-content>
+      <section class="card table-card">
+        <div class="loading-state" *ngIf="isLoading; else leaveTable">
+          <mat-spinner diameter="42"></mat-spinner>
+          <p>Loading leave records...</p>
+        </div>
+      </section>
+    </mat-drawer-content>
+
+    <mat-drawer class="form-drawer" mode="over" position="end" [opened]="isDrawerOpen" (closedStart)="closeDrawer()">
+      <section class="drawer-shell">
+        <header class="drawer-header">
+          <div>
+            <h2>Apply Leave</h2>
+            <p>Capture leave type, dates, and reason for approval.</p>
+          </div>
+
+          <button mat-icon-button type="button" aria-label="Close drawer" (click)="closeDrawer()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </header>
+
+        <form class="drawer-body" [formGroup]="leaveForm">
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Employee</mat-label>
+            <mat-select formControlName="employeeId">
+              <mat-option *ngFor="let employee of employees" [value]="employee.employeeId">
+                {{ employee.firstName }} {{ employee.lastName }} ({{ employee.employeeId }})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="leaveForm.controls.employeeId.hasError('required')">Employee is required.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Leave Type</mat-label>
+            <mat-select formControlName="leaveType">
+              <mat-option *ngFor="let leaveType of leaveTypes" [value]="leaveType">{{ leaveType }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="field-grid">
+            <mat-form-field appearance="outline" class="field">
+              <mat-label>From Date</mat-label>
+              <input matInput type="date" formControlName="fromDate" />
+              <mat-error *ngIf="leaveForm.controls.fromDate.hasError('required')">From date is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field">
+              <mat-label>To Date</mat-label>
+              <input matInput type="date" formControlName="toDate" />
+              <mat-error *ngIf="leaveForm.controls.toDate.hasError('required')">To date is required.</mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="field">
+            <mat-label>Reason</mat-label>
+            <textarea matInput rows="5" formControlName="reason"></textarea>
+            <mat-error *ngIf="leaveForm.controls.reason.hasError('required')">Reason is required.</mat-error>
+          </mat-form-field>
+        </form>
+
+        <footer class="drawer-footer">
+          <button mat-button type="button" (click)="closeDrawer()">Cancel</button>
+          <button mat-flat-button color="primary" type="button" [disabled]="isSubmitting" (click)="applyLeave()">
+            <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
+            <span>Save</span>
+          </button>
+        </footer>
+      </section>
+    </mat-drawer>
+  </mat-drawer-container>
+</section>
+
+<ng-template #leaveTable>
+  <div class="table-wrap" *ngIf="!emptyState; else emptyStateTpl">
+    <table mat-table [dataSource]="dataSource" class="erp-table">
+      <ng-container matColumnDef="employeeName">
+        <th mat-header-cell *matHeaderCellDef>Employee</th>
+        <td mat-cell *matCellDef="let record">
+          <div class="primary-cell">
+            <strong>{{ record.employeeName }}</strong>
+            <span>{{ record.employeeId }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="leaveType">
+        <th mat-header-cell *matHeaderCellDef>Leave Type</th>
+        <td mat-cell *matCellDef="let record">{{ record.leaveType }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fromDate">
+        <th mat-header-cell *matHeaderCellDef>From Date</th>
+        <td mat-cell *matCellDef="let record">{{ record.fromDate }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="toDate">
+        <th mat-header-cell *matHeaderCellDef>To Date</th>
+        <td mat-cell *matCellDef="let record">{{ record.toDate }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="reason">
+        <th mat-header-cell *matHeaderCellDef>Reason</th>
+        <td mat-cell *matCellDef="let record" class="reason-cell">{{ record.reason }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let record">
+          <span class="status-badge" [ngClass]="statusClass(record.status)">{{ record.status | titlecase }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let record">
+          <div class="actions-cell" *ngIf="record.status === 'PENDING'; else statusLocked">
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="updatingLeaveId === record.id"
+              (click)="updateLeaveStatus(record, 'APPROVED')"
+            >
+              Approve
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="updatingLeaveId === record.id"
+              (click)="updateLeaveStatus(record, 'REJECTED')"
+            >
+              Reject
+            </button>
+          </div>
+          <ng-template #statusLocked>
+            <span class="muted-label">Completed</span>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</ng-template>
+
+<ng-template #emptyStateTpl>
+  <div class="empty-state">
+    <mat-icon>event_note</mat-icon>
+    <p>No leave requests available.</p>
+  </div>
+</ng-template>

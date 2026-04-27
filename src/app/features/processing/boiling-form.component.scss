@@ -1,0 +1,122 @@
+:host {
+  display: block;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5ebf4;
+  box-shadow: 0 8px 24px rgba(26, 52, 104, 0.06);
+}
+
+.step-card {
+  padding: 18px 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #213860;
+}
+
+.card-header p {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-badge.pending {
+  background: #edf1f7;
+  color: #64748b;
+}
+
+.status-badge.in-progress {
+  background: #e7efff;
+  color: #2757b4;
+}
+
+.status-badge.completed {
+  background: #ddf5e7;
+  color: #1e7a47;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.field {
+  width: 100%;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #edf1f7;
+}
+
+.info-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #f7faff;
+  color: #365078;
+  font-size: 0.92rem;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  min-height: 42px;
+  border-radius: 8px;
+}
+
+.actions .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: currentColor;
+  margin-right: 8px;
+}
+
+@media (max-width: 720px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

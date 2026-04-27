@@ -1,0 +1,8 @@
+<mat-toolbar color="primary" class="page-toolbar">
+  <span class="title">{{ title }}</span>
+  <span class="spacer"></span>
+  <button *ngIf="addLabel" mat-flat-button color="accent" (click)="add.emit()">
+    {{ addLabel }}
+  </button>
+</mat-toolbar>
+

@@ -1,0 +1,115 @@
+<section class="detail-page" *ngIf="!isLoading; else loadingState">
+  <header class="page-header" *ngIf="invoice as currentInvoice">
+    <div>
+      <button mat-button type="button" class="back-link" routerLink="/accounts">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Invoices
+      </button>
+      <h1>{{ currentInvoice.id }}</h1>
+      <p>Review invoice lines, GST, and payment progress.</p>
+    </div>
+  </header>
+
+  <mat-drawer-container class="workspace-shell" autosize *ngIf="invoice as currentInvoice">
+    <mat-drawer-content>
+      <section class="summary-grid">
+        <article class="card summary-card">
+          <span>Party</span>
+          <strong>{{ currentInvoice.partyName }}</strong>
+          <p>{{ currentInvoice.party.location }}</p>
+        </article>
+
+        <article class="card summary-card">
+          <span>Status</span>
+          <strong>{{ currentInvoice.status }}</strong>
+          <p>{{ currentInvoice.invoiceDate }}</p>
+        </article>
+
+        <article class="card summary-card emphasis">
+          <span>Total Amount</span>
+          <strong>{{ currentInvoice.totalAmount | number:'1.0-0' }}</strong>
+          <p>GST {{ currentInvoice.gstAmount | number:'1.0-0' }}</p>
+        </article>
+      </section>
+
+      <section class="card info-card">
+        <div class="section-heading">
+          <div>
+            <h2>Invoice Info</h2>
+            <p>Invoice summary and GST details</p>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-row"><span>Invoice ID</span><strong>{{ currentInvoice.id }}</strong></div>
+          <div class="info-row"><span>Party</span><strong>{{ currentInvoice.partyName }}</strong></div>
+          <div class="info-row"><span>Status</span><strong>{{ currentInvoice.status }}</strong></div>
+          <div class="info-row"><span>Date</span><strong>{{ currentInvoice.invoiceDate }}</strong></div>
+          <div class="info-row"><span>GST %</span><strong>{{ currentInvoice.gstPercent }}%</strong></div>
+          <div class="info-row"><span>Linked SO</span><strong>{{ currentInvoice.linkedSalesOrderId || '--' }}</strong></div>
+        </div>
+      </section>
+
+      <section class="card items-card">
+        <div class="section-heading">
+          <div>
+            <h2>Items</h2>
+            <p>Invoice line items and extended values</p>
+          </div>
+        </div>
+
+        <div class="items-table">
+          <div class="items-head">
+            <span>Item</span>
+            <span>Qty</span>
+            <span>Price</span>
+            <span>Amount</span>
+          </div>
+
+          <div class="items-row" *ngFor="let item of currentInvoice.lineItems">
+            <strong>{{ item.itemName }}</strong>
+            <span>{{ item.quantity | number:'1.0-0' }}</span>
+            <span>{{ item.pricePerUnit | number:'1.0-0' }}</span>
+            <strong>{{ item.amount | number:'1.0-0' }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="card payment-card">
+        <div class="section-heading">
+          <div>
+            <h2>Payment</h2>
+            <p>Track total, receipts, and outstanding balance.</p>
+          </div>
+          <button mat-flat-button color="primary" type="button" (click)="openPaymentDrawer()" [disabled]="currentInvoice.balanceAmount <= 0">
+            <mat-icon>payments</mat-icon>
+            Record Payment
+          </button>
+        </div>
+
+        <div class="payment-grid">
+          <div class="payment-tile"><span>Total Amount</span><strong>{{ currentInvoice.totalAmount | number:'1.0-0' }}</strong></div>
+          <div class="payment-tile"><span>Paid Amount</span><strong>{{ currentInvoice.paidAmount | number:'1.0-0' }}</strong></div>
+          <div class="payment-tile emphasis"><span>Balance</span><strong>{{ currentInvoice.balanceAmount | number:'1.0-0' }}</strong></div>
+        </div>
+      </section>
+    </mat-drawer-content>
+
+    <mat-drawer class="payment-drawer" mode="over" position="end" [opened]="paymentDrawerOpen" (closedStart)="closePaymentDrawer()">
+      <app-payment-form
+        [invoice]="invoice"
+        [open]="paymentDrawerOpen"
+        [saving]="isSavingPayment"
+        (closeDrawer)="closePaymentDrawer()"
+        (submitPayment)="recordPayment($event)"
+      ></app-payment-form>
+    </mat-drawer>
+  </mat-drawer-container>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading invoice details...</p>
+  </div>
+</ng-template>

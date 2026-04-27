@@ -1,0 +1,81 @@
+<div class="page-header">
+  <h2>Party List</h2>
+  <button mat-raised-button color="primary" (click)="openPartyForm()">
+    <mat-icon>add</mat-icon> New Party
+  </button>
+</div>
+
+<div class="filter-row">
+  <mat-form-field appearance="outline" class="w-250">
+    <mat-label>Unique Name</mat-label>
+    <input matInput [(ngModel)]="filterValues.unique_name" (ngModelChange)="applyAdvancedFilter()" placeholder="Search Unique Name">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-200">
+    <mat-label>Party Type</mat-label>
+    <input matInput [(ngModel)]="filterValues.party_type" (ngModelChange)="applyAdvancedFilter()" placeholder="Search Party Type">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-200">
+    <mat-label>Status</mat-label>
+    <mat-select [(ngModel)]="filterValues.status" (selectionChange)="applyAdvancedFilter()">
+      <mat-option value="">All</mat-option>
+      <mat-option value="Active">Active</mat-option>
+      <mat-option value="Inactive">Inactive</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-stroked-button color="warn" (click)="resetFilters()">Reset Filters</button>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="full-width mat-elevation-z2">
+
+  <ng-container matColumnDef="unique_name">
+    <th mat-header-cell *matHeaderCellDef>Unique Name</th>
+    <td mat-cell *matCellDef="let row">{{ row.unique_name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="party_type">
+    <th mat-header-cell *matHeaderCellDef>Party Type</th>
+    <td mat-cell *matCellDef="let row">{{ row.party_type }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="legal_name">
+    <th mat-header-cell *matHeaderCellDef>Legal Name</th>
+    <td mat-cell *matCellDef="let row">{{ row.legal_name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="contact_info">
+    <th mat-header-cell *matHeaderCellDef>Contact</th>
+    <td mat-cell *matCellDef="let row">{{ row.contact_info }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="gstin">
+    <th mat-header-cell *matHeaderCellDef>GSTIN</th>
+    <td mat-cell *matCellDef="let row">{{ row.gstin }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let row">
+      <span [ngClass]="{'active-chip': row.status === 'Active', 'inactive-chip': row.status === 'Inactive'}">
+        {{ row.status }}
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let row">
+      <button mat-icon-button color="primary" (click)="editParty(row)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteParty(row.party_id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

@@ -1,0 +1,103 @@
+<section class="drawer-shell" *ngIf="batch">
+  <header class="drawer-header">
+    <div>
+      <p class="eyebrow">Quality Control</p>
+      <h2>{{ readOnly ? 'Batch Details' : 'QC Inspection' }}</h2>
+      <p class="drawer-subtitle">{{ batch.id }} • {{ batch.vendor }}</p>
+    </div>
+
+    <button mat-icon-button type="button" aria-label="Close drawer" (click)="closeDrawer.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <form class="drawer-body" [formGroup]="inspectionForm">
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>Batch Details</h3>
+      </div>
+
+      <div class="detail-grid">
+        <div>
+          <label>RCN ID</label>
+          <strong>{{ batch.id }}</strong>
+        </div>
+        <div>
+          <label>Vendor</label>
+          <strong>{{ batch.vendor }}</strong>
+        </div>
+        <div>
+          <label>Origin</label>
+          <strong>{{ batch.origin }}</strong>
+        </div>
+        <div>
+          <label>Net Weight</label>
+          <strong>{{ batch.netWeight | number:'1.0-0' }} kg</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>QC Inspection</h3>
+      </div>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Moisture Before (%)</mat-label>
+          <input matInput type="number" formControlName="moistureBefore" />
+          <mat-error *ngIf="inspectionForm.controls.moistureBefore.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Moisture After (%)</mat-label>
+          <input matInput type="number" formControlName="moistureAfter" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Foreign Matter (%)</mat-label>
+          <input matInput type="number" formControlName="foreignMatter" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Quality Grade</mat-label>
+          <mat-select formControlName="qualityGrade">
+            <mat-option *ngFor="let grade of qualityGrades" [value]="grade">{{ grade }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="inspectionForm.controls.qualityGrade.hasError('required')">Required</mat-error>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-heading">
+        <h3>QC Decision</h3>
+      </div>
+
+      <div class="alert-banner" *ngIf="dryingMessageVisible">
+        <mat-icon>wb_sunny</mat-icon>
+        <span>Drying Required</span>
+      </div>
+
+      <mat-checkbox class="decision-check" formControlName="requiresDrying">Requires Drying</mat-checkbox>
+
+      <mat-form-field appearance="outline" class="remarks-field">
+        <mat-label>Remarks</mat-label>
+        <textarea matInput rows="4" formControlName="remarks"></textarea>
+      </mat-form-field>
+    </section>
+  </form>
+
+  <footer class="drawer-actions">
+    <button mat-stroked-button type="button" (click)="closeDrawer.emit()">Cancel</button>
+
+    <ng-container *ngIf="!readOnly">
+      <button mat-stroked-button color="warn" type="button" [disabled]="saving" (click)="submit(false)">
+        {{ saving ? 'Saving...' : 'Reject' }}
+      </button>
+      <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="submit(true)">
+        {{ saving ? 'Saving...' : 'Approve' }}
+      </button>
+    </ng-container>
+  </footer>
+</section>

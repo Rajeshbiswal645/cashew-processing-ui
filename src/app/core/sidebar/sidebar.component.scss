@@ -1,0 +1,116 @@
+.erp-sidebar {
+  position: relative;
+  min-height: 100vh;
+  padding: 22px 18px 28px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  background:
+    radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.14), transparent 34%),
+    linear-gradient(180deg, #2c58c1 0%, #3668d9 50%, #477cf0 100%);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.brand-badge {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.brand-subtitle {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.sidebar-nav {
+  margin-top: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.nav-item {
+  min-height: 52px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.nav-item:hover {
+  transform: translateX(2px);
+}
+
+.nav-item mat-icon {
+  font-size: 22px;
+}
+
+.nav-item span {
+  font-size: 1.02rem;
+  font-weight: 500;
+}
+
+.sidebar-cashew {
+  position: relative;
+  margin-top: auto;
+  height: 190px;
+  opacity: 0.24;
+  background:
+    radial-gradient(circle at 35% 60%, rgba(255, 255, 255, 0.34), transparent 36%),
+    radial-gradient(circle at 62% 48%, rgba(255, 255, 255, 0.25), transparent 28%);
+  filter: blur(0.2px);
+}
+
+.sidebar-cashew::before,
+.sidebar-cashew::after {
+  content: '';
+  position: absolute;
+  bottom: 18px;
+  border-radius: 58% 42% 55% 45% / 62% 40% 60% 38%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.sidebar-cashew::before {
+  left: 28px;
+  width: 132px;
+  height: 92px;
+  transform: rotate(-18deg);
+}
+
+.sidebar-cashew::after {
+  left: 110px;
+  width: 114px;
+  height: 80px;
+  transform: rotate(16deg);
+}

@@ -1,0 +1,232 @@
+:host {
+  display: block;
+}
+
+.hrm-page {
+  display: grid;
+  gap: 20px;
+  min-height: 100%;
+  background: #f5f7fb;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.95rem;
+  font-weight: 600;
+  color: #213860;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.page-header button {
+  min-height: 44px;
+  border-radius: 10px;
+}
+
+.workspace-shell {
+  min-height: 72vh;
+  background: transparent;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e5ebf4;
+  box-shadow: 0 8px 24px rgba(26, 52, 104, 0.06);
+}
+
+.table-card {
+  overflow: hidden;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.erp-table {
+  width: 100%;
+}
+
+.erp-table .mat-mdc-header-row {
+  background: #f8faff;
+}
+
+.erp-table .mat-mdc-header-cell {
+  color: #6d80a3;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.erp-table .mat-mdc-row:hover {
+  background: #f6f9ff;
+}
+
+.erp-table .mat-mdc-cell,
+.erp-table .mat-mdc-header-cell {
+  padding-inline: 18px;
+}
+
+.primary-cell {
+  display: grid;
+  gap: 4px;
+}
+
+.primary-cell strong {
+  color: #223a66;
+}
+
+.primary-cell span,
+.muted-label {
+  color: #6f83a7;
+  font-size: 0.82rem;
+}
+
+.reason-cell {
+  max-width: 260px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-badge.pending {
+  background: #fff4d8;
+  color: #9a6200;
+}
+
+.status-badge.approved {
+  background: #ddf5e7;
+  color: #1e7a47;
+}
+
+.status-badge.rejected {
+  background: #fff0e8;
+  color: #b3601a;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.actions-cell button {
+  min-height: 38px;
+  border-radius: 8px;
+}
+
+.form-drawer {
+  width: min(420px, 94vw);
+  background: #f8faff;
+  border-left: 1px solid #e2e8f2;
+  box-shadow: -12px 0 28px rgba(24, 42, 82, 0.12);
+}
+
+.drawer-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid #e5ebf4;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  color: #213860;
+}
+
+.drawer-header p {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.drawer-body {
+  display: grid;
+  gap: 14px;
+  padding: 18px 20px;
+  overflow: auto;
+}
+
+.field,
+.field-grid {
+  width: 100%;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.drawer-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px 20px;
+  border-top: 1px solid #e5ebf4;
+}
+
+.drawer-footer button {
+  min-height: 42px;
+  border-radius: 8px;
+}
+
+.drawer-footer .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: currentColor;
+  margin-right: 8px;
+}
+
+.loading-state,
+.empty-state {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  color: #7386a8;
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  width: 36px;
+  height: 36px;
+  font-size: 36px;
+}
+
+@media (max-width: 960px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-cell {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

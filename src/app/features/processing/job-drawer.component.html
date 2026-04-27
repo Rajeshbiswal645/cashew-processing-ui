@@ -1,0 +1,97 @@
+<section class="job-drawer">
+  <header class="drawer-header">
+    <div>
+      <p class="eyebrow">{{ stage.name }} Job</p>
+      <h3>{{ job.machineLabel }}</h3>
+      <div class="drawer-meta">
+        <span class="job-subtitle">{{ job.status === 'IN_PROGRESS' ? 'Running' : job.status === 'COMPLETED' ? 'Completed' : 'Pending' }}</span>
+        <span class="machine-chip">{{ job.machineId || job.machineLabel }}</span>
+      </div>
+    </div>
+
+    <button mat-icon-button type="button" (click)="closeDrawer.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <form class="drawer-form" [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>Machine ID</mat-label>
+      <input matInput formControlName="machineId" [readonly]="isLocked" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Operator</mat-label>
+      <input matInput formControlName="operator" [readonly]="isLocked" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Input Weight</mat-label>
+      <input matInput type="number" formControlName="inputWeight" [readonly]="isLocked" />
+    </mat-form-field>
+
+    <ng-container *ngIf="isCuttingStage; else nonCuttingFields">
+      <mat-form-field appearance="outline">
+        <mat-label>Kernel Weight</mat-label>
+        <input matInput type="number" formControlName="kernelWeight" [readonly]="isLocked" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Shell Weight</mat-label>
+        <input matInput type="number" formControlName="shellWeight" [readonly]="isLocked" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Uncut Weight</mat-label>
+        <input matInput type="number" formControlName="uncutWeight" [readonly]="isLocked" />
+      </mat-form-field>
+    </ng-container>
+
+    <ng-template #nonCuttingFields>
+      <mat-form-field appearance="outline">
+        <mat-label>Output Weight</mat-label>
+        <input matInput type="number" formControlName="outputWeight" [readonly]="isLocked" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="isBoilingStage">
+        <mat-label>Temperature</mat-label>
+        <input matInput type="number" formControlName="temperature" [readonly]="isLocked" />
+      </mat-form-field>
+    </ng-template>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Start Time</mat-label>
+      <input matInput type="datetime-local" formControlName="startTime" [readonly]="isLocked" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>End Time</mat-label>
+      <input matInput type="datetime-local" formControlName="endTime" [readonly]="isLocked" />
+    </mat-form-field>
+  </form>
+
+  <section class="summary-grid">
+    <div class="summary-item">
+      <span>Input</span>
+      <strong>{{ (form.getRawValue().inputWeight || 0) | number:'1.0-1' }} kg</strong>
+    </div>
+    <div class="summary-item">
+      <span>Output</span>
+      <strong>{{ (form.getRawValue().outputWeight || 0) | number:'1.0-1' }} kg</strong>
+    </div>
+  </section>
+
+  <section class="yield-card">
+    <span>Yield %</span>
+    <strong>{{ yieldPercentage | number:'1.1-1' }}%</strong>
+  </section>
+
+  <div class="drawer-actions">
+    <button mat-stroked-button type="button" (click)="onStart()" [disabled]="isLocked || saving || job.status === 'COMPLETED'">
+      Start
+    </button>
+    <button mat-flat-button color="primary" type="button" (click)="onComplete()" [disabled]="isLocked || saving">
+      Complete
+    </button>
+  </div>
+</section>

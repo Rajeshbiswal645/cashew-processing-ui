@@ -1,0 +1,104 @@
+<div class="kernel-container">
+  <h2 class="title">Kernel Batch Management</h2>
+
+  <!-- Expandable Form -->
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true" class="form-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ editIndex !== null ? 'Update Kernel Batch' : 'Add New Kernel Batch' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="kernelForm" class="kernel-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Cutting ID</mat-label>
+            <input matInput formControlName="cutting_id" placeholder="Enter Cutting ID" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Input Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="input_weight" placeholder="Enter Input Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>After Borma Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="after_borma_weight" placeholder="Enter After Borma Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>After Humid Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="after_humid_weight" placeholder="Enter After Humid Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="Pending">Pending</mat-option>
+              <mat-option value="Completed">Completed</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" (click)="submitForm()" [disabled]="kernelForm.invalid">
+            {{ editIndex !== null ? 'Update' : 'Add' }}
+          </button>
+          <button mat-stroked-button color="warn" (click)="resetForm()">Clear</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- Kernel Batch Table -->
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table [dataSource]="kernelList" class="full-table">
+
+      <ng-container matColumnDef="kernel_batch_id">
+        <th mat-header-cell *matHeaderCellDef>Kernel ID</th>
+        <td mat-cell *matCellDef="let k">{{ k.kernel_batch_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cutting_id">
+        <th mat-header-cell *matHeaderCellDef>Cutting ID</th>
+        <td mat-cell *matCellDef="let k">{{ k.cutting_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="input_weight">
+        <th mat-header-cell *matHeaderCellDef>Input (kg)</th>
+        <td mat-cell *matCellDef="let k">{{ k.input_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="after_borma_weight">
+        <th mat-header-cell *matHeaderCellDef>Borma (kg)</th>
+        <td mat-cell *matCellDef="let k">{{ k.after_borma_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="after_humid_weight">
+        <th mat-header-cell *matHeaderCellDef>Humid (kg)</th>
+        <td mat-cell *matCellDef="let k">{{ k.after_humid_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let k">{{ k.status }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let k; let i = index">
+          <button mat-icon-button color="accent" (click)="editKernel(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteKernel(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

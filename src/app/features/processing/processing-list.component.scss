@@ -1,0 +1,284 @@
+:host {
+  display: block;
+}
+
+.processing-page {
+  display: grid;
+  gap: 20px;
+  min-height: 100%;
+  background: #f5f7fb;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.95rem;
+  font-weight: 600;
+  color: #213860;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e5ebf4;
+  box-shadow: 0 8px 24px rgba(26, 52, 104, 0.06);
+}
+
+.pipeline-card {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.pipeline-track {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.stage-node {
+  min-width: 168px;
+  background: #f8faff;
+  border: 1px solid #dee8f7;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stage-node:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.stage-node.active,
+.stage-node.expanded {
+  border-color: #2f6cce;
+  box-shadow: 0 6px 18px rgba(40, 87, 180, 0.18);
+  transform: translateY(-2px);
+}
+
+.stage-name {
+  font-weight: 700;
+  color: #1d3257;
+  letter-spacing: 0.04em;
+}
+
+.stage-node p {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: #6d80a3;
+}
+
+.stage-separator {
+  align-self: center;
+  width: 18px;
+  height: 2px;
+  background: #8ea5cc;
+  position: relative;
+  flex: 0 0 18px;
+}
+
+.stage-separator::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: -4px;
+  border-left: 6px solid #8ea5cc;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+.pipeline-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.pipeline-status.pending {
+  background: #edf1f7;
+  color: #64748b;
+}
+
+.pipeline-status.running {
+  background: #e7efff;
+  color: #2757b4;
+}
+
+.pipeline-status.completed {
+  background: #ddf5e7;
+  color: #1e7a47;
+}
+
+.jobs-panel {
+  border: 1px solid #e7edf7;
+  box-shadow: none;
+  padding: 16px;
+}
+
+.jobs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.jobs-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #213860;
+  letter-spacing: 0.04em;
+}
+
+.jobs-list {
+  display: grid;
+  gap: 10px;
+}
+
+.job-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.2fr) repeat(2, minmax(110px, 1fr)) minmax(130px, auto) minmax(170px, auto);
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #e7edf7;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.job-row:hover {
+  border-color: #bfd1f2;
+  background: #f8fbff;
+}
+
+.job-main strong {
+  display: block;
+  color: #233a61;
+}
+
+.job-main span {
+  color: #6d80a3;
+  font-size: 0.8rem;
+}
+
+.job-weight span {
+  display: block;
+  font-size: 0.75rem;
+  color: #6d80a3;
+}
+
+.job-weight strong {
+  color: #1d3257;
+  font-size: 0.9rem;
+}
+
+.job-action {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.job-action button {
+  min-height: 36px;
+  border-radius: 8px;
+}
+
+.job-action button .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: currentColor;
+  margin-right: 6px;
+}
+
+.stage-badge,
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.stage-badge.boiling,
+.status-badge.in-progress {
+  background: #e7efff;
+  color: #2757b4;
+}
+
+.stage-badge.cutting {
+  background: #e6f8ff;
+  color: #0f728d;
+}
+
+.stage-badge.completed,
+.status-badge.completed {
+  background: #ddf5e7;
+  color: #1e7a47;
+}
+
+.status-badge.pending {
+  background: #edf1f7;
+  color: #64748b;
+}
+
+.jobs-empty {
+  color: #7386a8;
+  padding: 14px;
+  text-align: center;
+  border: 1px dashed #d8e3f6;
+  border-radius: 10px;
+}
+
+.loading-state,
+.empty-state {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  color: #7386a8;
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  width: 36px;
+  height: 36px;
+  font-size: 36px;
+}
+
+@media (max-width: 980px) {
+  .job-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .job-action {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .pipeline-card {
+    padding: 14px;
+  }
+
+  .stage-node {
+    min-width: 150px;
+  }
+
+  .job-row {
+    grid-template-columns: 1fr;
+  }
+}

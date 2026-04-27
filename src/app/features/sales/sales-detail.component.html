@@ -1,0 +1,187 @@
+<section class="detail-page" *ngIf="!isLoading; else loadingState">
+  <header class="page-header" *ngIf="order as currentOrder">
+    <div>
+      <button mat-button type="button" class="back-link" routerLink="/sales">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Sales Orders
+      </button>
+      <h1>{{ currentOrder.id }}</h1>
+      <p>Manage allocation, dispatch, and invoice readiness</p>
+    </div>
+  </header>
+
+  <section class="summary-grid" *ngIf="order as currentOrder">
+    <article class="card summary-card">
+      <span class="label">SO ID</span>
+      <strong>{{ currentOrder.id }}</strong>
+      <p>{{ currentOrder.orderDate }}</p>
+    </article>
+
+    <article class="card summary-card">
+      <span class="label">Buyer</span>
+      <strong>{{ currentOrder.buyerName }}</strong>
+      <p>{{ currentOrder.destination }}</p>
+    </article>
+
+    <article class="card summary-card emphasis">
+      <span class="label">Status</span>
+      <strong>{{ getStatusLabel(currentOrder.status) }}</strong>
+      <p>Order Value {{ currentOrder.totalAmount | number:'1.0-0' }}</p>
+    </article>
+  </section>
+
+  <section class="card order-info-card" *ngIf="order as currentOrder">
+    <div class="section-heading">
+      <div>
+        <h2>Order Info</h2>
+        <p>Buyer, pricing, and fulfilment snapshot</p>
+      </div>
+      <span class="status-badge" [ngClass]="getStatusClass(currentOrder.status)">{{ getStatusLabel(currentOrder.status) }}</span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-row">
+        <span>SO ID</span>
+        <strong>{{ currentOrder.id }}</strong>
+      </div>
+      <div class="info-row">
+        <span>Buyer</span>
+        <strong>{{ currentOrder.buyerName }}</strong>
+      </div>
+      <div class="info-row">
+        <span>Date</span>
+        <strong>{{ currentOrder.orderDate }}</strong>
+      </div>
+      <div class="info-row">
+        <span>Status</span>
+        <strong>{{ getStatusLabel(currentOrder.status) }}</strong>
+      </div>
+      <div class="info-row">
+        <span>Quantity</span>
+        <strong>{{ currentOrder.quantity | number:'1.0-1' }} kg</strong>
+      </div>
+      <div class="info-row">
+        <span>Price / kg</span>
+        <strong>{{ currentOrder.pricePerKg | number:'1.0-0' }}</strong>
+      </div>
+      <div class="info-row emphasis-row">
+        <span>Total Amount</span>
+        <strong>{{ currentOrder.totalAmount | number:'1.0-0' }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="card allocation-card" *ngIf="order as currentOrder" id="allocation">
+    <div class="section-heading">
+      <div>
+        <h2>Stock Allocation</h2>
+        <p>Assign finished goods batches before dispatch.</p>
+      </div>
+      <div class="summary-chip">
+        Allocated Input {{ totalAllocatedInput | number:'1.0-1' }} / {{ currentOrder.quantity | number:'1.0-1' }} kg
+      </div>
+    </div>
+
+    <div class="allocation-meta">
+      <div class="meta-card">
+        <span>Total Available</span>
+        <strong>{{ totalAvailable | number:'1.0-1' }} kg</strong>
+      </div>
+      <div class="meta-card emphasis">
+        <span>Required Quantity</span>
+        <strong>{{ currentOrder.quantity | number:'1.0-1' }} kg</strong>
+      </div>
+    </div>
+
+    <form [formGroup]="allocationForm">
+      <div class="allocation-table">
+      <div class="allocation-head">
+        <span>Batch ID</span>
+        <span>Category</span>
+        <span>Available Qty</span>
+        <span>Allocate Qty</span>
+      </div>
+
+      <div class="allocation-row" *ngFor="let stock of currentOrder.stockOptions">
+        <strong>{{ stock.batchId }}</strong>
+        <span>{{ stock.productCategory }}</span>
+        <span>{{ getFreeQty(stock) | number:'1.0-1' }} kg</span>
+        <mat-form-field appearance="outline" class="allocation-field">
+          <mat-label>Allocate Qty</mat-label>
+          <input matInput type="number" [formControlName]="stock.batchId" />
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+    <div class="allocation-footer">
+      <div class="guard-note" [class.disabled]="!canAllocate">
+        Cannot allocate more than available stock. Allocation sets the order status to Allocated.
+      </div>
+
+      <button mat-flat-button color="primary" type="button" (click)="allocateStock()" [disabled]="!canAllocate">
+        <mat-spinner *ngIf="isAllocating" diameter="18"></mat-spinner>
+        <span>Allocate Stock</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="card dispatch-entry-card" *ngIf="order as currentOrder">
+    <div class="section-heading">
+      <div>
+        <h2>Dispatch</h2>
+        <p>Open the dispatch workspace to confirm transport details and deduct inventory.</p>
+      </div>
+      <button mat-flat-button color="primary" type="button" (click)="openDispatch()" [disabled]="!canOpenDispatch">
+        <mat-icon>local_shipping</mat-icon>
+        Dispatch Order
+      </button>
+    </div>
+
+    <div class="dispatch-preview-grid">
+      <div class="invoice-tile">
+        <span>Allocated Quantity</span>
+        <strong>{{ currentOrder.allocatedQuantity | number:'1.0-1' }} kg</strong>
+      </div>
+      <div class="invoice-tile">
+        <span>Dispatched Quantity</span>
+        <strong>{{ currentOrder.dispatchedQuantity | number:'1.0-1' }} kg</strong>
+      </div>
+      <div class="invoice-tile emphasis">
+        <span>Dispatch State</span>
+        <strong>{{ currentOrder.status === 'ALLOCATED' ? 'Ready to Dispatch' : getStatusLabel(currentOrder.status) }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="card invoice-card" *ngIf="order as currentOrder">
+    <div class="section-heading">
+      <div>
+        <h2>Invoice Ready</h2>
+        <p>Finalize the sales order after dispatch confirmation.</p>
+      </div>
+      <button mat-flat-button color="primary" type="button" (click)="completeOrder()" [disabled]="!canComplete">
+        <mat-spinner *ngIf="isCompleting" diameter="18"></mat-spinner>
+        <span>Mark Completed</span>
+      </button>
+    </div>
+
+    <div class="invoice-grid">
+      <div class="invoice-tile">
+        <span>Dispatched Qty</span>
+        <strong>{{ currentOrder.dispatchedQuantity | number:'1.0-1' }} kg</strong>
+      </div>
+      <div class="invoice-tile emphasis">
+        <span>Invoice Amount</span>
+        <strong>{{ (currentOrder.dispatchedQuantity || currentOrder.quantity) * currentOrder.pricePerKg | number:'1.0-0' }}</strong>
+      </div>
+    </div>
+  </section>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading sales order details...</p>
+  </div>
+</ng-template>

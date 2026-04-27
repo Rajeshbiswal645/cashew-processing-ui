@@ -1,0 +1,99 @@
+<section class="workflow-page">
+  <header class="page-header">
+    <div>
+      <h1>Drying Management</h1>
+      <p>Manage drying batches</p>
+    </div>
+
+    <button mat-flat-button color="primary" type="button" [disabled]="!candidates.length" (click)="openCreateDrawer()">
+      <mat-icon>add</mat-icon>
+      Create Drying Batch
+    </button>
+  </header>
+
+  <mat-drawer-container class="workspace-shell" autosize>
+    <mat-drawer-content>
+      <section class="card table-card">
+        <div class="table-wrap" *ngIf="!isLoading; else loadingState">
+          <table mat-table [dataSource]="batches" class="erp-table">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>Drying ID</th>
+              <td mat-cell *matCellDef="let row"><strong>{{ row.id }}</strong></td>
+            </ng-container>
+
+            <ng-container matColumnDef="rcnId">
+              <th mat-header-cell *matHeaderCellDef>RCN ID</th>
+              <td mat-cell *matCellDef="let row">{{ row.rcnId }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="vendor">
+              <th mat-header-cell *matHeaderCellDef>Vendor</th>
+              <td mat-cell *matCellDef="let row">{{ row.vendor }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="weightBeforeDrying">
+              <th mat-header-cell *matHeaderCellDef>Weight Before Drying</th>
+              <td mat-cell *matCellDef="let row" class="metric-cell">
+                {{ row.weightBeforeDrying | number:'1.0-0' }} kg
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="moistureBefore">
+              <th mat-header-cell *matHeaderCellDef>Moisture Before</th>
+              <td mat-cell *matCellDef="let row" class="metric-cell">{{ row.moistureBefore | number:'1.1-1' }}%</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="status-badge" [ngClass]="getStatusClass(row.status)">{{ getStatusLabel(row.status) }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let row">
+                <button
+                  mat-flat-button
+                  color="primary"
+                  type="button"
+                  [disabled]="row.status === 'COMPLETED'"
+                  (click)="openCompleteDrawer(row)"
+                >
+                  {{ row.status === 'COMPLETED' ? 'Completed' : 'Complete' }}
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <div class="empty-state" *ngIf="!batches.length">
+            <mat-icon>wb_sunny</mat-icon>
+            <p>No drying batches available.</p>
+          </div>
+        </div>
+      </section>
+    </mat-drawer-content>
+
+    <mat-drawer class="form-drawer" mode="over" position="end" [opened]="isDrawerOpen" (closedStart)="closeDrawer()">
+      <app-drying-form
+        [mode]="drawerMode"
+        [candidates]="candidates"
+        [batch]="selectedBatch"
+        [saving]="isSaving"
+        (closeDrawer)="closeDrawer()"
+        (createBatch)="createBatch($event)"
+        (completeBatch)="completeBatch($event)"
+      ></app-drying-form>
+    </mat-drawer>
+  </mat-drawer-container>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading drying batches...</p>
+  </div>
+</ng-template>

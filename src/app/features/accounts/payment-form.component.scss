@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.drawer-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  background: #f8faff;
+}
+
+.drawer-header,
+.drawer-footer {
+  padding: 20px;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #e5ebf4;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  color: #213860;
+}
+
+.drawer-header p {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.drawer-body {
+  padding: 20px;
+  overflow: auto;
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  width: 100%;
+}
+
+.readonly-card {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #edf4ff 0%, #ffffff 100%);
+  border: 1px solid #d8e5fb;
+}
+
+.readonly-card span {
+  color: #6d80a3;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.readonly-card strong {
+  color: #223a66;
+  font-size: 1.18rem;
+}
+
+.readonly-card p {
+  margin: 0;
+  color: #6f83a7;
+}
+
+.drawer-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #e5ebf4;
+}
+
+.drawer-footer button {
+  min-height: 42px;
+  border-radius: 10px;
+}
+
+.drawer-footer .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: currentColor;
+  margin-right: 8px;
+}

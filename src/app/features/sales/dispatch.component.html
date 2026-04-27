@@ -1,0 +1,122 @@
+<section class="dispatch-page" *ngIf="!isLoading; else loadingState">
+  <header class="page-header" *ngIf="order as currentOrder">
+    <div>
+      <button mat-button type="button" class="back-link" [routerLink]="['/sales', currentOrder.id]">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Order
+      </button>
+      <h1>Dispatch Order</h1>
+      <p>Confirm shipment details for {{ currentOrder.id }} and deduct finished goods inventory.</p>
+    </div>
+    <span class="status-badge" [ngClass]="getStatusClass(currentOrder.status)">{{ statusLabel }}</span>
+  </header>
+
+  <section class="dispatch-layout" *ngIf="order as currentOrder">
+    <article class="card info-card">
+      <header class="card-header">
+        <div>
+          <h2>Dispatch Info</h2>
+          <p>Sales order dispatch summary</p>
+        </div>
+      </header>
+
+      <div class="tile-grid">
+        <div class="info-tile">
+          <span>SO ID</span>
+          <strong>{{ currentOrder.id }}</strong>
+        </div>
+        <div class="info-tile">
+          <span>Buyer</span>
+          <strong>{{ currentOrder.buyerName }}</strong>
+        </div>
+        <div class="info-tile emphasis">
+          <span>Allocated Quantity</span>
+          <strong>{{ currentOrder.allocatedQuantity | number:'1.0-1' }} kg</strong>
+        </div>
+      </div>
+    </article>
+
+    <article class="card form-card">
+      <header class="card-header">
+        <div>
+          <h2>Transport Details</h2>
+          <p>Capture truck and driver information before dispatch.</p>
+        </div>
+      </header>
+
+      <form class="form-grid" [formGroup]="form">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Truck ID</mat-label>
+          <input matInput formControlName="truckId" />
+          <mat-error *ngIf="form.controls.truckId.hasError('required')">Truck ID is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Driver Name</mat-label>
+          <input matInput formControlName="driverName" />
+          <mat-error *ngIf="form.controls.driverName.hasError('required')">Driver name is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Driver Phone</mat-label>
+          <input matInput formControlName="driverPhone" />
+          <mat-error *ngIf="form.controls.driverPhone.hasError('required')">Driver phone is required.</mat-error>
+          <mat-error *ngIf="form.controls.driverPhone.hasError('minlength')">Enter at least 10 digits.</mat-error>
+        </mat-form-field>
+      </form>
+    </article>
+
+    <article class="card form-card">
+      <header class="card-header">
+        <div>
+          <h2>Dispatch Details</h2>
+          <p>Confirm the actual shipped weight and dispatch date.</p>
+        </div>
+      </header>
+
+      <form class="form-grid dispatch-grid" [formGroup]="form">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Actual Weight</mat-label>
+          <input matInput type="number" formControlName="actualWeight" />
+          <mat-error *ngIf="form.controls.actualWeight.hasError('required')">Actual weight is required.</mat-error>
+          <mat-error *ngIf="form.controls.actualWeight.hasError('min')">Actual weight must be above 0.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Dispatch Date</mat-label>
+          <input matInput type="date" formControlName="dispatchDate" />
+          <mat-error *ngIf="form.controls.dispatchDate.hasError('required')">Dispatch date is required.</mat-error>
+        </mat-form-field>
+      </form>
+
+      <div class="summary-strip">
+        <div>
+          <span>Destination</span>
+          <strong>{{ currentOrder.destination }}</strong>
+        </div>
+        <div>
+          <span>Inventory Impact</span>
+          <strong>Deduct allocated stock on confirmation</strong>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="dispatch-note" [class.disabled]="currentOrder.status !== 'ALLOCATED'">
+          {{ currentOrder.status === 'ALLOCATED' ? 'Dispatch will deduct inventory and move the order to Dispatched.' : 'Dispatch is available only for allocated orders.' }}
+        </div>
+
+        <button mat-flat-button color="primary" type="button" (click)="submit()" [disabled]="!canDispatch">
+          <mat-spinner *ngIf="isSaving" diameter="18"></mat-spinner>
+          <span>Confirm Dispatch</span>
+        </button>
+      </div>
+    </article>
+  </section>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading dispatch details...</p>
+  </div>
+</ng-template>

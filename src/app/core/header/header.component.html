@@ -1,0 +1,31 @@
+<mat-toolbar class="erp-toolbar">
+  <div class="toolbar-brand">
+    <button mat-icon-button class="menu-button" type="button" aria-label="Open navigation">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="toolbar-title">{{ title }}</span>
+  </div>
+
+  <div class="toolbar-actions">
+    <button mat-icon-button type="button" aria-label="Search">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button mat-icon-button type="button" aria-label="Notifications">
+      <mat-icon>notifications</mat-icon>
+    </button>
+
+    <div class="user-chip">
+      <div class="user-avatar">{{ user.name.charAt(0) }}</div>
+      <div class="user-meta">
+        <span class="user-name">{{ user.name }}</span>
+        <span class="user-role">{{ user.role }}</span>
+      </div>
+      <mat-icon>expand_more</mat-icon>
+    </div>
+
+    <button class="logout-button" type="button" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </div>
+</mat-toolbar>

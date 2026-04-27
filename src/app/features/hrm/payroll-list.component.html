@@ -1,0 +1,100 @@
+<section class="hrm-page">
+  <header class="page-header">
+    <div>
+      <h1>Payroll</h1>
+      <p>Review generated payroll, deductions, net salary, and payout status</p>
+    </div>
+
+    <button mat-flat-button color="primary" type="button" (click)="openGenerate()">
+      <mat-icon>calculate</mat-icon>
+      <span>Generate Payroll</span>
+    </button>
+  </header>
+
+  <section class="card filters-card">
+    <mat-form-field appearance="outline">
+      <mat-label>Month</mat-label>
+      <mat-select [(value)]="selectedMonth" (selectionChange)="loadPayroll()">
+        <mat-option *ngFor="let month of months" [value]="month">{{ month }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <section class="card table-card">
+    <div class="loading-state" *ngIf="isLoading; else payrollTable">
+      <mat-spinner diameter="42"></mat-spinner>
+      <p>Loading payroll records...</p>
+    </div>
+  </section>
+</section>
+
+<ng-template #payrollTable>
+  <div class="table-wrap" *ngIf="rows.length > 0; else emptyState">
+    <table mat-table [dataSource]="rows" class="erp-table">
+      <ng-container matColumnDef="employeeName">
+        <th mat-header-cell *matHeaderCellDef>Employee Name</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="primary-cell">
+            <strong>{{ row.employeeName }}</strong>
+            <span>{{ row.department }} · {{ row.designation }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="month">
+        <th mat-header-cell *matHeaderCellDef>Month</th>
+        <td mat-cell *matCellDef="let row">{{ row.month }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="basicSalary">
+        <th mat-header-cell *matHeaderCellDef>Basic Salary</th>
+        <td mat-cell *matCellDef="let row">{{ row.basicSalary | currency:'INR':'symbol':'1.0-0' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="deductions">
+        <th mat-header-cell *matHeaderCellDef>Deductions</th>
+        <td mat-cell *matCellDef="let row">{{ row.deductions | currency:'INR':'symbol':'1.0-0' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="netSalary">
+        <th mat-header-cell *matHeaderCellDef>Net Salary</th>
+        <td mat-cell *matCellDef="let row"><strong class="salary-highlight">{{ row.netSalary | currency:'INR':'symbol':'1.0-0' }}</strong></td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="status-badge" [ngClass]="statusClass(row.status)">{{ row.status | titlecase }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="actions-cell">
+            <button mat-stroked-button type="button" (click)="openPayslip(row)">Payslip</button>
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="row.status === 'PAID' || updatingPayrollId === row.id"
+              (click)="markPaid(row)"
+            >
+              Mark Paid
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</ng-template>
+
+<ng-template #emptyState>
+  <div class="empty-state">
+    <mat-icon>payments</mat-icon>
+    <p>No payroll has been generated for the selected month.</p>
+  </div>
+</ng-template>

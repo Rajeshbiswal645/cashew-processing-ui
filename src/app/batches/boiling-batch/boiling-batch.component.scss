@@ -1,0 +1,45 @@
+.boiling-container {
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.form-panel {
+  margin-bottom: 20px;
+}
+
+.boiling-form .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.table-wrapper {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.full-table {
+  width: 100%;
+  min-width: 800px;
+}
+
+th {
+  font-weight: 600;
+}
+
+mat-form-field {
+  width: 100%;
+}

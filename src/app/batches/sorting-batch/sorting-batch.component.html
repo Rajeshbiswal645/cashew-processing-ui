@@ -1,0 +1,118 @@
+<div class="sorting-container">
+  <h2 class="title">Sorting Batch Management</h2>
+
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true" class="form-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ editIndex !== null ? 'Update Sorting Batch' : 'Add New Sorting Batch' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="sortingForm" class="sorting-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Peeling ID</mat-label>
+            <mat-select formControlName="peeling_id">
+              <mat-option *ngFor="let p of peelingList" [value]="p.peeling_id">
+                {{ p.peeling_id }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Input Weight (kg)</mat-label>
+            <input matInput type="number" formControlName="input_weight" />
+          </mat-form-field>
+
+          <ng-container formGroupName="category_weights">
+            <mat-form-field appearance="outline">
+              <mat-label>Cat1 (kg)</mat-label>
+              <input matInput type="number" formControlName="cat1" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Cat2 (kg)</mat-label>
+              <input matInput type="number" formControlName="cat2" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Cat3 (kg)</mat-label>
+              <input matInput type="number" formControlName="cat3" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Cat4 (kg)</mat-label>
+              <input matInput type="number" formControlName="cat4" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Cat5 (kg)</mat-label>
+              <input matInput type="number" formControlName="cat5" />
+            </mat-form-field>
+          </ng-container>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Operator</mat-label>
+            <mat-select formControlName="operator_id">
+              <mat-option *ngFor="let op of operatorList" [value]="op.id">
+                {{ op.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" (click)="submitForm()" [disabled]="sortingForm.invalid">
+            {{ editIndex !== null ? 'Update' : 'Add' }}
+          </button>
+          <button mat-stroked-button color="warn" (click)="resetForm()">Clear</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table [dataSource]="sortingList" class="full-table">
+      <ng-container matColumnDef="sorting_id">
+        <th mat-header-cell *matHeaderCellDef>Sorting ID</th>
+        <td mat-cell *matCellDef="let s">{{ s.sorting_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="peeling_id">
+        <th mat-header-cell *matHeaderCellDef>Peeling ID</th>
+        <td mat-cell *matCellDef="let s">{{ s.peeling_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="input_weight">
+        <th mat-header-cell *matHeaderCellDef>Input</th>
+        <td mat-cell *matCellDef="let s">{{ s.input_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="category_weights">
+        <th mat-header-cell *matHeaderCellDef>Category Weights</th>
+        <td mat-cell *matCellDef="let s">{{ getCategoryWeightString(s.category_weights) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="operator_id">
+        <th mat-header-cell *matHeaderCellDef>Operator</th>
+        <td mat-cell *matCellDef="let s">{{ getOperatorName(s.operator_id) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let s; let i = index">
+          <button mat-icon-button color="accent" (click)="editSorting(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteSorting(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

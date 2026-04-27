@@ -1,0 +1,96 @@
+<section class="processing-page">
+  <header class="page-header">
+    <div>
+      <h1>Processing</h1>
+      <p>Track batches across pipeline stages</p>
+    </div>
+  </header>
+
+  <section class="card pipeline-card" *ngIf="!isLoading; else loadingState">
+    <div class="empty-state" *ngIf="emptyState">
+      <mat-icon>manufacturing</mat-icon>
+      <p>No processing batches available.</p>
+    </div>
+
+    <ng-container *ngIf="!emptyState">
+      <div class="pipeline-track">
+        <ng-container *ngFor="let stage of pipelineStages; let last = last">
+          <button
+            type="button"
+            class="stage-node"
+            [class.active]="activeStageKey === stage.key"
+            [class.expanded]="isExpanded(stage)"
+            [disabled]="stage.batchCount === 0"
+            (click)="toggleStage(stage)"
+          >
+            <div class="stage-name">{{ stage.label }}</div>
+            <span [class]="getDisplayStatusClass(stage.status)">
+              {{ getDisplayStatusLabel(stage.status) }}
+            </span>
+            <p>{{ stage.batchCount }} batches</p>
+          </button>
+          <div class="stage-separator" *ngIf="!last" aria-hidden="true"></div>
+        </ng-container>
+      </div>
+
+      <section class="jobs-panel card" *ngFor="let stage of pipelineStages">
+        <ng-container *ngIf="isExpanded(stage)">
+          <header class="jobs-header">
+            <h2>{{ stage.label }}</h2>
+            <span [class]="getDisplayStatusClass(stage.status)">
+              {{ getDisplayStatusLabel(stage.status) }}
+            </span>
+          </header>
+
+          <div class="jobs-empty" *ngIf="stage.jobs.length === 0">No jobs available for this stage.</div>
+
+          <div class="jobs-list" *ngIf="stage.jobs.length > 0">
+            <article class="job-row" *ngFor="let job of stage.jobs" (click)="openJob(job.process)" role="button" tabindex="0">
+              <div class="job-main">
+                <strong>{{ job.machineOrOperator }}</strong>
+                <span>{{ job.processId }}</span>
+              </div>
+
+              <div class="job-weight">
+                <span>Input</span>
+                <strong>{{ job.inputWeight === null ? '--' : (job.inputWeight | number:'1.1-1') + ' kg' }}</strong>
+              </div>
+
+              <div class="job-weight">
+                <span>Output</span>
+                <strong>{{ job.outputWeight === null ? '--' : (job.outputWeight | number:'1.1-1') + ' kg' }}</strong>
+              </div>
+
+              <div class="job-status">
+                <span class="status-badge" [ngClass]="getStatusClass(job.status)">
+                  {{ getStatusLabel(job.status) }}
+                </span>
+              </div>
+
+              <div class="job-action">
+                <button mat-stroked-button type="button" (click)="viewProcess(job.process); $event.stopPropagation()">Details</button>
+                <button
+                  mat-flat-button
+                  color="primary"
+                  type="button"
+                  (click)="startProcess(job.process); $event.stopPropagation()"
+                  [disabled]="!canStart(job.process) || startingProcessId === job.process.id"
+                >
+                  <mat-spinner *ngIf="startingProcessId === job.process.id" diameter="16"></mat-spinner>
+                  <span>{{ job.process.currentStage === 'COMPLETED' ? 'Closed' : 'Start' }}</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </ng-container>
+      </section>
+    </ng-container>
+  </section>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading processing batches...</p>
+  </div>
+</ng-template>

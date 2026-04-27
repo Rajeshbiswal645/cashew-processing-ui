@@ -1,0 +1,39 @@
+.ledger-table {
+  border: 1px solid #e5ebf4;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ledger-head,
+.ledger-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  padding: 14px 16px;
+  align-items: center;
+}
+
+.ledger-head {
+  background: #f8faff;
+  color: #6d80a3;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ledger-row {
+  border-top: 1px solid #edf1f7;
+  color: #5d739a;
+}
+
+.ledger-row strong {
+  color: #223a66;
+}
+
+@media (max-width: 960px) {
+  .ledger-head,
+  .ledger-row {
+    grid-template-columns: 1fr;
+  }
+}

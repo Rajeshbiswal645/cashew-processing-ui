@@ -1,0 +1,91 @@
+<section class="dashboard-shell">
+  <header class="dashboard-header">
+    <div>
+      <p class="eyebrow">Operations Overview</p>
+      <h1>Dashboard</h1>
+      <p class="summary">Track stock movement, processing throughput, and dispatch readiness from one place.</p>
+    </div>
+
+    <button type="button" class="settings-button" aria-label="Dashboard settings" (click)="openSettings()">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </header>
+
+  <section class="stats-grid">
+    <article class="stat-card" *ngFor="let stat of statCards" [ngClass]="stat.tone">
+      <div class="stat-icon">
+        <mat-icon>{{ stat.icon }}</mat-icon>
+      </div>
+      <div class="stat-copy">
+        <p class="stat-value">
+          {{ stat.value }}<span *ngIf="stat.unit">{{ stat.unit }}</span>
+        </p>
+        <p class="stat-title">{{ stat.title }}</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="dashboard-actions">
+    <button *ngFor="let action of quickActions" type="button" class="action-button" (click)="navigate(action.route)">
+      <mat-icon>{{ action.icon }}</mat-icon>
+      <span>{{ action.label }}</span>
+    </button>
+  </section>
+
+  <section class="content-grid">
+    <article class="panel activity-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Recent Activity</h2>
+          <p>Latest production and dispatch events across the unit</p>
+        </div>
+        <button type="button" class="ghost-button" (click)="viewAllActivity()">View all</button>
+      </div>
+
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let item of activityFeed">
+          <div class="activity-icon" [ngClass]="item.tone">
+            <mat-icon>{{ item.icon }}</mat-icon>
+          </div>
+          <div class="activity-copy">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.detail }}</p>
+          </div>
+          <time>{{ item.time }}</time>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel insight-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Factory Pulse</h2>
+          <p>Key performance indicators for the current cycle</p>
+        </div>
+      </div>
+
+      <div class="performance-list">
+        <div class="performance-card" *ngFor="let card of performanceCards">
+          <span class="performance-label">{{ card.label }}</span>
+          <strong>{{ card.value }}</strong>
+          <p>{{ card.note }}</p>
+        </div>
+      </div>
+
+      <div class="module-links">
+        <button type="button" class="module-link" (click)="goTo('parties')">
+          <mat-icon>groups</mat-icon>
+          <span>Manage Vendors</span>
+        </button>
+        <button type="button" class="module-link" (click)="goTo('sales')">
+          <mat-icon>receipt_long</mat-icon>
+          <span>Sales Orders</span>
+        </button>
+        <button type="button" class="module-link" (click)="goTo('reports')">
+          <mat-icon>analytics</mat-icon>
+          <span>Reports Hub</span>
+        </button>
+      </div>
+    </article>
+  </section>
+</section>

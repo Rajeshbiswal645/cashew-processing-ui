@@ -1,0 +1,168 @@
+<div class="rcn-container">
+  <h2 class="title">RCN Batch Management</h2>
+
+  <!-- Expandable input form -->
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true" class="form-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ editIndex !== null ? 'Update RCN Batch' : 'Add New RCN Batch' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="rcnForm" class="rcn-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Party ID</mat-label>
+            <input matInput formControlName="party_id" placeholder="Enter Party ID" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Origin</mat-label>
+            <input matInput formControlName="origin" placeholder="Origin Location" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Processing Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="proc_date" placeholder="Select Date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Truck ID</mat-label>
+            <input matInput formControlName="truck_id" placeholder="Enter Truck ID" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Gross Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="gross_weight" (input)="calculateNetWeight()" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tare Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="tare_weight" (input)="calculateNetWeight()" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Net Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="net_weight" readonly />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Moisture Before (%)</mat-label>
+            <input type="number" matInput formControlName="moisture_before" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Moisture After (%)</mat-label>
+            <input type="number" matInput formControlName="moisture_after" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Weight Before Drying (kg)</mat-label>
+            <input type="number" matInput formControlName="weight_before_drying" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Weight After Drying (kg)</mat-label>
+            <input type="number" matInput formControlName="weight_after_drying" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Drying Batch ID</mat-label>
+            <input matInput formControlName="drying_batch_id" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="Pending">Pending</mat-option>
+              <mat-option value="Processed">Processed</mat-option>
+              <mat-option value="Completed">Completed</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" (click)="submitForm()" [disabled]="rcnForm.invalid">
+            {{ editIndex !== null ? 'Update' : 'Submit' }}
+          </button>
+          <button mat-stroked-button color="warn" (click)="resetForm()">Clear</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- Table -->
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table [dataSource]="rcnList" class="full-table">
+
+      <ng-container matColumnDef="rcn_id">
+        <th mat-header-cell *matHeaderCellDef>RCN ID</th>
+        <td mat-cell *matCellDef="let r">{{r.rcn_id}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="party_id">
+        <th mat-header-cell *matHeaderCellDef>Party ID</th>
+        <td mat-cell *matCellDef="let r">{{r.party_id}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="origin">
+        <th mat-header-cell *matHeaderCellDef>Origin</th>
+        <td mat-cell *matCellDef="let r">{{r.origin}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="proc_date">
+        <th mat-header-cell *matHeaderCellDef>Proc. Date</th>
+        <td mat-cell *matCellDef="let r">{{r.proc_date | date:'mediumDate'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="truck_id">
+        <th mat-header-cell *matHeaderCellDef>Truck</th>
+        <td mat-cell *matCellDef="let r">{{r.truck_id}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="gross_weight">
+        <th mat-header-cell *matHeaderCellDef>Gross</th>
+        <td mat-cell *matCellDef="let r">{{r.gross_weight}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="tare_weight">
+        <th mat-header-cell *matHeaderCellDef>Tare</th>
+        <td mat-cell *matCellDef="let r">{{r.tare_weight}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="net_weight">
+        <th mat-header-cell *matHeaderCellDef>Net</th>
+        <td mat-cell *matCellDef="let r">{{r.net_weight}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let r">
+          <span [ngClass]="{
+            'status-pending': r.status === 'Pending',
+            'status-processed': r.status === 'Processed',
+            'status-completed': r.status === 'Completed'
+          }">{{r.status}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let r; let i = index">
+          <button mat-icon-button color="accent" (click)="editRCN(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteRCN(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

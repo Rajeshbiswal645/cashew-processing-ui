@@ -1,0 +1,41 @@
+
+> cashew-processing-unit@0.0.0 start
+> ng serve --host 0.0.0.0 --port 4200
+
+
+Warning: This is a simple server for use in testing or debugging Angular applications
+locally. It hasn't been reviewed for security issues.
+
+Binding this server to an open connection can result in compromising your application or
+computer. Using a different host than the one passed to the "--host" flag might result in
+websocket connection issues. You might need to use "--disable-host-check" if that's the
+case.
+    
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+- Generating browser application bundles (phase: setup)...
+√ Browser application bundle generation complete.
+
+Initial Chunk Files                               | Names                               |  Raw Size
+vendor.js                                         | vendor                              |   5.24 MB |
+main.js                                           | main                                | 510.12 kB |
+polyfills.js                                      | polyfills                           | 252.57 kB |
+styles.css, styles.js                             | styles                              | 234.83 kB |
+runtime.js                                        | runtime                             |  12.65 kB |
+
+| Initial Total                       |   6.22 MB
+
+Lazy Chunk Files                                  | Names                               |  Raw Size
+src_app_features_batches_batches_module_ts.js     | features-batches-batches-module     |  28.61 kB |
+src_app_features_inventory_inventory_module_ts.js | features-inventory-inventory-module |   5.60 kB |
+src_app_features_invoices_invoices_module_ts.js   | features-invoices-invoices-module   |   5.54 kB |
+src_app_features_parties_parties_module_ts.js     | features-parties-parties-module     |   5.49 kB |
+src_app_features_reports_reports_module_ts.js     | features-reports-reports-module     |   5.49 kB |
+src_app_features_sales_sales_module_ts.js         | features-sales-sales-module         |   5.37 kB |
+src_app_features_qc_qc_module_ts.js               | features-qc-qc-module               |   5.20 kB |
+
+Build at: 2026-03-13T17:30:13.861Z - Hash: 264912358b974c40 - Time: 14325ms
+
+** Angular Live Development Server is listening on 0.0.0.0:4200, open your browser on http://localhost:4200/ **
+
+
+√ Compiled successfully.

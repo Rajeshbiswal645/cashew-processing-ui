@@ -1,0 +1,53 @@
+:host {
+  display: block;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5ebf4;
+  box-shadow: 0 8px 24px rgba(26, 52, 104, 0.06);
+}
+
+.filter-card {
+  padding: 18px 20px;
+}
+
+.filter-row {
+  display: grid;
+  gap: 16px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+mat-button-toggle-group {
+  justify-self: end;
+}
+
+@media (max-width: 1200px) {
+  .filters-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-field {
+    grid-column: 1 / -1;
+  }
+
+  mat-button-toggle-group {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+}

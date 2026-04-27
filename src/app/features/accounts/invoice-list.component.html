@@ -1,0 +1,133 @@
+<section class="accounts-page">
+  <header class="page-header">
+    <div>
+      <h1>Invoices</h1>
+      <p>Manage sales and vendor invoices</p>
+    </div>
+    <button mat-flat-button color="primary" class="primary-action" type="button" (click)="openInvoiceDrawer()">
+      <mat-icon>add</mat-icon>
+      Create Invoice
+    </button>
+  </header>
+
+  <mat-drawer-container class="workspace-shell" autosize>
+    <mat-drawer-content>
+      <section class="card filter-card">
+        <form class="filters-grid" [formGroup]="filtersForm">
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput formControlName="search" placeholder="Search by Invoice ID / Party" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice Type</mat-label>
+            <mat-select formControlName="invoiceType">
+              <mat-option value="ALL">All</mat-option>
+              <mat-option value="SALES">Sales Invoice</mat-option>
+              <mat-option value="PURCHASE">Purchase Invoice</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="ALL">All</mat-option>
+              <mat-option value="PENDING">Pending</mat-option>
+              <mat-option value="PAID">Paid</mat-option>
+              <mat-option value="OVERDUE">Overdue</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </section>
+
+      <section class="card data-card">
+        <div class="data-header">
+          <mat-button-toggle-group [value]="viewMode" (change)="changeView($event.value)">
+            <mat-button-toggle value="INVOICE">Invoice View</mat-button-toggle>
+            <mat-button-toggle value="LEDGER">Ledger View</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <ng-container *ngIf="!isLoading; else loadingState">
+          <div class="invoice-table" *ngIf="viewMode === 'INVOICE'; else ledgerView">
+            <div class="table-head">
+              <span>Invoice ID</span>
+              <span>Party Name</span>
+              <span>Invoice Type</span>
+              <span>Invoice Date</span>
+              <span>Amount</span>
+              <span>GST Amount</span>
+              <span>Total Amount</span>
+              <span>Status</span>
+              <span>Actions</span>
+            </div>
+
+            <div class="table-row" *ngFor="let invoice of invoices">
+              <strong>{{ invoice.id }}</strong>
+              <span>{{ invoice.partyName }}</span>
+              <span>{{ getInvoiceTypeLabel(invoice.invoiceType) }}</span>
+              <span>{{ invoice.invoiceDate }}</span>
+              <span>{{ invoice.subtotal | number:'1.0-0' }}</span>
+              <span>{{ invoice.gstAmount | number:'1.0-0' }}</span>
+              <span class="metric">{{ invoice.totalAmount | number:'1.0-0' }}</span>
+              <span class="status-badge" [ngClass]="getStatusClass(invoice.status)">{{ getStatusLabel(invoice.status) }}</span>
+              <div class="actions-cell">
+                <button mat-stroked-button type="button" (click)="viewInvoice(invoice)">View</button>
+                <button mat-flat-button color="primary" type="button" (click)="openPaymentDrawer(invoice)" [disabled]="invoice.status === 'PAID'">
+                  Record Payment
+                </button>
+                <button mat-stroked-button type="button" (click)="downloadInvoice(invoice)">Download PDF</button>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #ledgerView>
+            <app-ledger [entries]="ledgerEntries"></app-ledger>
+          </ng-template>
+        </ng-container>
+      </section>
+    </mat-drawer-content>
+
+    <mat-drawer class="form-drawer" mode="over" position="end" [opened]="invoiceDrawerOpen" (closedStart)="closeInvoiceDrawer()">
+      <app-invoice-form
+        [parties]="parties"
+        [salesOrders]="salesOrders"
+        [open]="invoiceDrawerOpen"
+        [saving]="isSavingInvoice"
+        (closeDrawer)="closeInvoiceDrawer()"
+        (saveInvoice)="saveInvoice($event)"
+      ></app-invoice-form>
+    </mat-drawer>
+
+    <mat-drawer class="payment-drawer" mode="over" position="end" [opened]="paymentDrawerOpen" (closedStart)="closePaymentDrawer()">
+      <app-payment-form
+        [invoice]="selectedInvoice"
+        [open]="paymentDrawerOpen"
+        [saving]="isSavingPayment"
+        (closeDrawer)="closePaymentDrawer()"
+        (submitPayment)="recordPayment($event)"
+      ></app-payment-form>
+    </mat-drawer>
+  </mat-drawer-container>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading invoices...</p>
+  </div>
+</ng-template>

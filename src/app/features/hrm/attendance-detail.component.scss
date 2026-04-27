@@ -1,0 +1,26 @@
+:host { display: block; }
+.detail-page { display: grid; gap: 20px; min-height: 100%; background: #f5f7fb; }
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.page-header h1 { margin: 0; font-size: 1.95rem; font-weight: 600; color: #213860; }
+.page-header p { margin: 6px 0 0; color: #6f83a7; }
+.card { background: #fff; border-radius: 10px; border: 1px solid #e5ebf4; box-shadow: 0 8px 24px rgba(26,52,104,.06); }
+.summary-card { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding: 20px; }
+.summary-item { padding: 16px; border-radius: 12px; background: linear-gradient(135deg, #edf4ff 0%, #fff 100%); }
+.summary-item span { display: block; font-size: .78rem; color: #6f83a7; text-transform: uppercase; letter-spacing: .04em; }
+.summary-item strong { display: block; margin-top: 8px; font-size: 1.4rem; color: #2155b4; }
+.table-wrap { overflow-x: auto; }
+.erp-table { width: 100%; }
+.erp-table .mat-mdc-header-row { background: #f8faff; }
+.erp-table .mat-mdc-header-cell { color: #6d80a3; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.erp-table .mat-mdc-cell, .erp-table .mat-mdc-header-cell { padding-inline: 18px; }
+.status-chip { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 999px; font-weight: 700; }
+.status-chip.present, .status-chip.leave { background: #ddf5e7; color: #1e7a47; }
+.status-chip.absent { background: #fff0e8; color: #b3601a; }
+.status-chip.half_day { background: #e7efff; color: #2956b6; }
+.loading-state, .empty-state { min-height: 280px; display: grid; place-items: center; gap: 10px; color: #7386a8; text-align: center; }
+.empty-state { padding: 24px; }
+.empty-state mat-icon { width: 36px; height: 36px; font-size: 36px; }
+@media (max-width: 960px) {
+  .page-header { flex-direction: column; align-items: stretch; }
+  .summary-card { grid-template-columns: 1fr 1fr; }
+}

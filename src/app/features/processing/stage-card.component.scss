@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.stage-card {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.card-copy {
+  min-height: 92px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  clip-path: polygon(0 8%, 84% 8%, 100% 50%, 84% 92%, 0 92%, 7% 50%);
+  box-shadow:
+    0 16px 30px rgba(17, 51, 108, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+}
+
+.stage-card:hover .card-copy,
+.stage-card.expanded .card-copy {
+  transform: translateY(-3px);
+  box-shadow:
+    0 22px 34px rgba(17, 51, 108, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.stage-card.active .card-copy {
+  filter: saturate(1.08);
+}
+
+.stage-card.locked {
+  color: #f8fbff;
+}
+
+.stage-card.completed .card-copy {
+  background: linear-gradient(135deg, #42af69 0%, #238b50 52%, #1d6f40 100%);
+}
+
+.stage-card.running .card-copy {
+  background: linear-gradient(135deg, #78a6ff 0%, #3b73e8 52%, #1d51bd 100%);
+}
+
+.stage-card.pending .card-copy,
+.stage-card.locked .card-copy {
+  background: linear-gradient(135deg, #d8e0ec 0%, #bcc8da 52%, #acb8cc 100%);
+}
+
+.stage-copy {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+}
+
+.stage-name {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.stage-status,
+.stage-jobs {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.stage-icon {
+  font-size: 1.15rem;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+@media (max-width: 680px) {
+  .card-copy {
+    min-height: 84px;
+    padding: 14px 18px;
+  }
+}

@@ -1,0 +1,29 @@
+<article class="job-card" [class.selected]="selected" [class.disabled]="disabled">
+  <div class="job-head">
+    <span class="job-label">Machine / Operator</span>
+    <span class="job-status" [ngClass]="job.status.toLowerCase().replace('_', '-')">
+      {{ statusLabel }}
+    </span>
+  </div>
+
+  <div class="job-identity">
+    <strong>{{ job.machineId || job.machineLabel }}</strong>
+    <span>{{ job.operator || 'Operator pending' }}</span>
+  </div>
+
+  <div class="job-metrics">
+    <div>
+      <span>Input Weight</span>
+      <strong>{{ job.inputWeight === null ? '--' : (job.inputWeight | number:'1.0-1') + ' kg' }}</strong>
+    </div>
+    <div>
+      <span>Output Weight</span>
+      <strong>{{ job.outputWeight === null ? '--' : (job.outputWeight | number:'1.0-1') + ' kg' }}</strong>
+    </div>
+  </div>
+
+  <button mat-stroked-button type="button" class="manage-button" [disabled]="disabled" (click)="jobSelect.emit()">
+    <mat-icon>tune</mat-icon>
+    Manage Job
+  </button>
+</article>

@@ -1,0 +1,138 @@
+<div class="cutting-container">
+  <h2 class="title">Cutting Batch Management</h2>
+
+  <!-- Expandable Form -->
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true" class="form-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ editIndex !== null ? 'Update Cutting Batch' : 'Add New Cutting Batch' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="cuttingForm" class="cutting-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Boiling ID</mat-label>
+            <input matInput formControlName="boiling_id" placeholder="Enter Boiling ID" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Machine ID</mat-label>
+            <input matInput formControlName="machine_id" placeholder="Enter Machine ID" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Input Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="input_weight" placeholder="Enter Input Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Kernel Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="kernel_weight" placeholder="Enter Kernel Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Shell Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="shell_weight" placeholder="Enter Shell Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Uncut Weight (kg)</mat-label>
+            <input type="number" matInput formControlName="uncut_weight" placeholder="Enter Uncut Weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="MACHINE">MACHINE</mat-option>
+              <mat-option value="MANUAL">MANUAL</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Operator</mat-label>
+            <mat-select formControlName="operator_id">
+              <mat-option *ngFor="let op of operatorList" [value]="op.id">
+                {{ op.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" (click)="submitForm()" [disabled]="cuttingForm.invalid">
+            {{ editIndex !== null ? 'Update' : 'Add' }}
+          </button>
+          <button mat-stroked-button color="warn" (click)="resetForm()">Clear</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- Cutting Batch Table -->
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table [dataSource]="cuttingList" class="full-table">
+
+      <ng-container matColumnDef="cutting_id">
+        <th mat-header-cell *matHeaderCellDef>Cutting ID</th>
+        <td mat-cell *matCellDef="let c">{{ c.cutting_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="boiling_id">
+        <th mat-header-cell *matHeaderCellDef>Boiling ID</th>
+        <td mat-cell *matCellDef="let c">{{ c.boiling_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="machine_id">
+        <th mat-header-cell *matHeaderCellDef>Machine ID</th>
+        <td mat-cell *matCellDef="let c">{{ c.machine_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="input_weight">
+        <th mat-header-cell *matHeaderCellDef>Input Weight</th>
+        <td mat-cell *matCellDef="let c">{{ c.input_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="kernel_weight">
+        <th mat-header-cell *matHeaderCellDef>Kernel</th>
+        <td mat-cell *matCellDef="let c">{{ c.kernel_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="shell_weight">
+        <th mat-header-cell *matHeaderCellDef>Shell</th>
+        <td mat-cell *matCellDef="let c">{{ c.shell_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="uncut_weight">
+        <th mat-header-cell *matHeaderCellDef>Uncut</th>
+        <td mat-cell *matCellDef="let c">{{ c.uncut_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let c">{{ c.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="operator_id">
+        <th mat-header-cell *matHeaderCellDef>Operator</th>
+        <td mat-cell *matCellDef="let c">{{ getOperatorName(c.operator_id) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let c; let i = index">
+          <button mat-icon-button color="accent" (click)="editCutting(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteCutting(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

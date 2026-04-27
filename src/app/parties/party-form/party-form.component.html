@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ isEditMode ? "Edit Party" : "Add Party" }}</h2>
+
+<form [formGroup]="partyForm" class="form-container">
+  <mat-dialog-content>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Unique Name</mat-label>
+        <input matInput formControlName="uniqueName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Party Type</mat-label>
+        <mat-select formControlName="partyType">
+          <mat-option value="Customer">Customer</mat-option>
+          <mat-option value="Supplier">Supplier</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Legal Name</mat-label>
+      <input matInput formControlName="legalName" />
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Classification</mat-label>
+        <input matInput formControlName="classification" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>GSTIN</mat-label>
+        <input matInput formControlName="gstin" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Contact Info</mat-label>
+      <input matInput formControlName="contactInfo" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Bank Details</mat-label>
+      <textarea matInput rows="2" formControlName="bankDetails"></textarea>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      {{ isEditMode ? "Update" : "Save" }}
+    </button>
+  </mat-dialog-actions>
+</form>

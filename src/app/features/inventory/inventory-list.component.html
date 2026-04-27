@@ -1,0 +1,139 @@
+<section class="inventory-page">
+  <header class="page-header">
+    <div>
+      <h1>Inventory Management</h1>
+      <p>Track stock across all processing stages</p>
+    </div>
+  </header>
+
+  <mat-drawer-container class="workspace-shell" autosize>
+    <mat-drawer-content>
+      <app-inventory-filter [viewMode]="viewMode" (filtersChange)="onFiltersChange($event)" (viewModeChange)="onViewModeChange($event)"></app-inventory-filter>
+
+      <section class="card table-card">
+        <mat-tab-group class="inventory-tabs" (selectedIndexChange)="onTabChange($event)">
+          <mat-tab *ngFor="let tab of stockTabs" [label]="tab.label"></mat-tab>
+        </mat-tab-group>
+
+        <div class="table-wrap" *ngIf="!isLoading; else loadingState">
+          <ng-container *ngIf="viewMode === 'SUMMARY'; else ledgerView">
+            <table mat-table [dataSource]="summaryDataSource" matSort #summarySort="matSort" class="erp-table">
+              <ng-container matColumnDef="batchId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
+                <td mat-cell *matCellDef="let row"><strong>{{ row.batchId }}</strong></td>
+              </ng-container>
+
+              <ng-container matColumnDef="stage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Stage</th>
+                <td mat-cell *matCellDef="let row">{{ row.stage }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+                <td mat-cell *matCellDef="let row">{{ row.category === 'BYPRODUCTS' ? 'Byproducts' : (row.category | titlecase) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity (kg)</th>
+                <td mat-cell *matCellDef="let row" class="metric-cell">{{ row.quantity | number:'1.0-0' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="location">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+                <td mat-cell *matCellDef="let row">{{ row.location }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="status-badge" [ngClass]="getStatusClass(row.status)">{{ row.status | titlecase }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let row">
+                  <div class="actions-cell">
+                    <button mat-stroked-button type="button" (click)="viewDetails(row)">View Details</button>
+                    <button mat-flat-button color="primary" type="button" (click)="traceBatch(row)">Trace Batch</button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="summaryColumns"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: summaryColumns"
+                [class.selected-row]="selectedBatchId === row.batchId"
+              ></tr>
+            </table>
+
+            <mat-paginator #summaryPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </ng-container>
+
+          <ng-template #ledgerView>
+            <table mat-table [dataSource]="ledgerDataSource" matSort #ledgerSort="matSort" class="erp-table">
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="batchId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
+                <td mat-cell *matCellDef="let row"><strong>{{ row.batchId }}</strong></td>
+              </ng-container>
+
+              <ng-container matColumnDef="stage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Stage</th>
+                <td mat-cell *matCellDef="let row">{{ row.stage }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="movementType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Movement Type</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="movement-chip" [class.out]="row.movementType === 'OUT'">{{ row.movementType }}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+                <td mat-cell *matCellDef="let row" class="metric-cell">{{ row.quantity | number:'1.0-0' }} kg</td>
+              </ng-container>
+
+              <ng-container matColumnDef="reference">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Reference</th>
+                <td mat-cell *matCellDef="let row">{{ row.reference }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="ledgerColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: ledgerColumns" [class.selected-row]="selectedBatchId === row.batchId"></tr>
+            </table>
+
+            <mat-paginator #ledgerPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </ng-template>
+
+          <div class="empty-state" *ngIf="emptyState">
+            <mat-icon>inventory_2</mat-icon>
+            <p>No inventory available</p>
+          </div>
+        </div>
+      </section>
+    </mat-drawer-content>
+
+    <mat-drawer class="form-drawer" mode="over" position="end" [opened]="isDrawerOpen" (closedStart)="closeDrawer()">
+      <app-batch-trace-drawer
+        [batchId]="selectedBatchId"
+        [steps]="traceSteps"
+        [loading]="traceLoading"
+        (closeDrawer)="closeDrawer()"
+      ></app-batch-trace-drawer>
+    </mat-drawer>
+  </mat-drawer-container>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-state">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading inventory...</p>
+  </div>
+</ng-template>

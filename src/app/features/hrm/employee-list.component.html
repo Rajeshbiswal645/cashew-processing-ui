@@ -1,0 +1,125 @@
+<section class="hrm-page">
+  <header class="page-header">
+    <div>
+      <h1>Employees</h1>
+      <p>Manage workforce and HR operations</p>
+    </div>
+
+    <button mat-flat-button color="primary" type="button" (click)="openCreateDrawer()">
+      <mat-icon>person_add</mat-icon>
+      <span>Add Employee</span>
+    </button>
+  </header>
+
+  <mat-drawer-container class="workspace-shell" autosize>
+    <mat-drawer-content>
+      <section class="card filter-card" [formGroup]="filterForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Search</mat-label>
+          <input matInput formControlName="search" placeholder="Name / Employee ID" />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Department</mat-label>
+          <mat-select formControlName="department">
+            <mat-option value="ALL">All Departments</mat-option>
+            <mat-option *ngFor="let department of departments" [value]="department">{{ department }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let option of statusOptions" [value]="option">
+              {{ option === 'ALL' ? 'All Statuses' : (option | titlecase) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
+
+      <section class="card table-card">
+        <div class="loading-state" *ngIf="isLoading; else employeeTable">
+          <mat-spinner diameter="42"></mat-spinner>
+          <p>Loading employees...</p>
+        </div>
+      </section>
+    </mat-drawer-content>
+
+    <mat-drawer class="form-drawer" mode="over" position="end" [opened]="isDrawerOpen" (closedStart)="closeDrawer()">
+      <app-employee-form
+        [employee]="selectedEmployee"
+        [departments]="departments"
+        [open]="isDrawerOpen"
+        [saving]="isSaving"
+        (closeDrawer)="closeDrawer()"
+        (saveEmployee)="saveEmployee($event)"
+      ></app-employee-form>
+    </mat-drawer>
+  </mat-drawer-container>
+</section>
+
+<ng-template #employeeTable>
+  <div class="table-wrap" *ngIf="!emptyState; else emptyStateTpl">
+    <table mat-table [dataSource]="dataSource" class="erp-table">
+      <ng-container matColumnDef="employeeId">
+        <th mat-header-cell *matHeaderCellDef>Employee ID</th>
+        <td mat-cell *matCellDef="let employee"><strong>{{ employee.employeeId }}</strong></td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let employee">
+          <div class="primary-cell">
+            <strong>{{ employee.firstName }} {{ employee.lastName }}</strong>
+            <span>{{ employee.email }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="department">
+        <th mat-header-cell *matHeaderCellDef>Department</th>
+        <td mat-cell *matCellDef="let employee">{{ employee.department }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="designation">
+        <th mat-header-cell *matHeaderCellDef>Designation</th>
+        <td mat-cell *matCellDef="let employee">{{ employee.designation }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let employee">{{ employee.phone }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let employee">
+          <span class="status-badge" [ngClass]="statusClass(employee.status)">{{ employee.status | titlecase }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let employee">
+          <div class="actions-cell">
+            <button mat-stroked-button type="button" (click)="viewEmployee(employee)">View</button>
+            <button mat-flat-button color="primary" type="button" (click)="editEmployee(employee)">Edit</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</ng-template>
+
+<ng-template #emptyStateTpl>
+  <div class="empty-state">
+    <mat-icon>groups</mat-icon>
+    <p>No employees match the selected filters.</p>
+  </div>
+</ng-template>

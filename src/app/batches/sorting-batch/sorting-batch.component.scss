@@ -1,0 +1,41 @@
+.sorting-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  font-family: "Inter", sans-serif;
+}
+
+.title {
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: right;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.table-wrapper {
+  margin-top: 30px;
+  overflow-x: auto;
+}
+
+.full-table {
+  width: 100%;
+}
+
+mat-expansion-panel {
+  background-color: #ffffff;
+}

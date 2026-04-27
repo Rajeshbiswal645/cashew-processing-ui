@@ -1,0 +1,138 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.drawer-shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fb;
+}
+
+.drawer-header {
+  padding: 20px 20px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #e4eaf3;
+  background: #ffffff;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5a79c0;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  color: #223a66;
+  font-size: 1.35rem;
+}
+
+.drawer-subtitle {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.form-card {
+  background: #ffffff;
+  border: 1px solid #e5ebf4;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(26, 52, 104, 0.05);
+}
+
+.section-heading {
+  margin-bottom: 14px;
+}
+
+.section-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2a406d;
+}
+
+.detail-grid,
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.detail-grid label {
+  display: block;
+  margin-bottom: 6px;
+  color: #7b8da9;
+  font-size: 0.78rem;
+}
+
+.detail-grid strong {
+  color: #223a66;
+}
+
+.alert-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #eef5ff;
+  color: #2757b4;
+  font-weight: 600;
+}
+
+.decision-check {
+  margin-bottom: 8px;
+}
+
+.remarks-field {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.drawer-actions {
+  padding: 16px 20px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #e4eaf3;
+  background: #ffffff;
+}
+
+.drawer-actions button[mat-flat-button] {
+  min-width: 130px;
+}
+
+@media (max-width: 640px) {
+  .detail-grid,
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drawer-header,
+  .drawer-body,
+  .drawer-actions {
+    padding-inline: 16px;
+  }
+
+  .drawer-actions {
+    flex-wrap: wrap;
+  }
+}

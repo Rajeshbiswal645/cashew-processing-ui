@@ -1,0 +1,19 @@
+<div class="ledger-table">
+  <div class="ledger-head">
+    <span>Date</span>
+    <span>Reference ID</span>
+    <span>Type</span>
+    <span>Debit</span>
+    <span>Credit</span>
+    <span>Balance</span>
+  </div>
+
+  <div class="ledger-row" *ngFor="let entry of entries">
+    <span>{{ entry.date }}</span>
+    <strong>{{ entry.referenceId }}</strong>
+    <span>{{ entry.type }}</span>
+    <span>{{ entry.debit ? (entry.debit | number:'1.0-0') : '--' }}</span>
+    <span>{{ entry.credit ? (entry.credit | number:'1.0-0') : '--' }}</span>
+    <strong>{{ entry.balance | number:'1.0-0' }}</strong>
+  </div>
+</div>

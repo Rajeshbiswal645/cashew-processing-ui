@@ -1,0 +1,119 @@
+<div class="peeling-container">
+  <h2 class="title">Peeling Batch Management</h2>
+
+  <!-- Expandable Form -->
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true" class="form-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ editIndex !== null ? 'Update Peeling Batch' : 'Add New Peeling Batch' }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="peelingForm" class="peeling-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Kernel Batch ID</mat-label>
+            <mat-select formControlName="kernel_batch_id">
+              <mat-option *ngFor="let k of kernelList" [value]="k.kernel_batch_id">
+                {{ k.kernel_batch_id }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Input Weight (kg)</mat-label>
+            <input matInput type="number" formControlName="input_weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cat1 Weight (kg)</mat-label>
+            <input matInput type="number" formControlName="cat1_weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cat6 Weight (kg)</mat-label>
+            <input matInput type="number" formControlName="cat6_weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Husk Weight (kg)</mat-label>
+            <input matInput type="number" formControlName="husk_weight" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Operator</mat-label>
+            <mat-select formControlName="operator_id">
+              <mat-option *ngFor="let op of operatorList" [value]="op.id">
+                {{ op.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" (click)="submitForm()" [disabled]="peelingForm.invalid">
+            {{ editIndex !== null ? 'Update' : 'Add' }}
+          </button>
+          <button mat-stroked-button color="warn" (click)="resetForm()">Clear</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- Peeling Table -->
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table [dataSource]="peelingList" class="full-table">
+
+      <ng-container matColumnDef="peeling_id">
+        <th mat-header-cell *matHeaderCellDef>Peeling ID</th>
+        <td mat-cell *matCellDef="let p">{{ p.peeling_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="kernel_batch_id">
+        <th mat-header-cell *matHeaderCellDef>Kernel Batch</th>
+        <td mat-cell *matCellDef="let p">{{ p.kernel_batch_id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="input_weight">
+        <th mat-header-cell *matHeaderCellDef>Input</th>
+        <td mat-cell *matCellDef="let p">{{ p.input_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cat1_weight">
+        <th mat-header-cell *matHeaderCellDef>Cat1</th>
+        <td mat-cell *matCellDef="let p">{{ p.cat1_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cat6_weight">
+        <th mat-header-cell *matHeaderCellDef>Cat6</th>
+        <td mat-cell *matCellDef="let p">{{ p.cat6_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="husk_weight">
+        <th mat-header-cell *matHeaderCellDef>Husk</th>
+        <td mat-cell *matCellDef="let p">{{ p.husk_weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="operator_id">
+        <th mat-header-cell *matHeaderCellDef>Operator</th>
+        <td mat-cell *matCellDef="let p">{{ getOperatorName(p.operator_id) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let p; let i = index">
+          <button mat-icon-button color="accent" (click)="editPeeling(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deletePeeling(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

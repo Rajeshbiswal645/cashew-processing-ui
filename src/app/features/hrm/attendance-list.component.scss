@@ -1,0 +1,31 @@
+:host { display: block; }
+.hrm-page { display: grid; gap: 20px; min-height: 100%; background: #f5f7fb; }
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.page-header h1 { margin: 0; font-size: 1.95rem; font-weight: 600; color: #213860; }
+.page-header p { margin: 6px 0 0; color: #6f83a7; }
+.card { background: #fff; border-radius: 10px; border: 1px solid #e5ebf4; box-shadow: 0 8px 24px rgba(26, 52, 104, 0.06); }
+.controls-card { display: grid; grid-template-columns: repeat(2, minmax(180px, 220px)) minmax(120px, 1fr); gap: 16px; padding: 18px; align-items: start; }
+.summary-chip { display: grid; align-content: center; justify-items: end; min-height: 56px; padding: 0 12px; border-radius: 12px; background: linear-gradient(135deg, #edf4ff 0%, #fff 100%); }
+.summary-chip span { color: #6f83a7; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.summary-chip strong { color: #2155b4; font-size: 1.4rem; }
+.table-card { overflow: hidden; }
+.table-wrap { overflow-x: auto; }
+.erp-table { width: 100%; }
+.erp-table .mat-mdc-header-row { background: #f8faff; }
+.erp-table .mat-mdc-header-cell { color: #6d80a3; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.erp-table .mat-mdc-cell, .erp-table .mat-mdc-header-cell { padding-inline: 18px; }
+.erp-table .mat-mdc-row:hover { background: #f6f9ff; }
+.primary-cell { display: grid; gap: 4px; }
+.primary-cell strong { color: #223a66; }
+.primary-cell span { color: #6f83a7; font-size: 0.82rem; }
+.status-field { width: 180px; margin: 10px 0 2px; }
+.table-footer { display: flex; justify-content: flex-end; padding: 18px; border-top: 1px solid #e5ebf4; }
+.table-footer button { min-height: 42px; border-radius: 8px; }
+.table-footer .mat-mdc-progress-spinner { --mdc-circular-progress-active-indicator-color: currentColor; margin-right: 8px; }
+.loading-state, .empty-state { min-height: 280px; display: grid; place-items: center; gap: 10px; color: #7386a8; text-align: center; }
+.empty-state mat-icon { width: 36px; height: 36px; font-size: 36px; }
+@media (max-width: 960px) {
+  .page-header { flex-direction: column; align-items: stretch; }
+  .controls-card { grid-template-columns: 1fr; }
+  .status-field { width: 100%; }
+}

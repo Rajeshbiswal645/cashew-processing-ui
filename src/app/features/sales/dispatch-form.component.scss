@@ -1,0 +1,144 @@
+:host {
+  display: block;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5ebf4;
+  box-shadow: 0 8px 24px rgba(26, 52, 104, 0.06);
+}
+
+.step-card {
+  padding: 18px 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #213860;
+}
+
+.card-header p {
+  margin: 6px 0 0;
+  color: #6f83a7;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-badge.allocated {
+  background: #e7efff;
+  color: #2757b4;
+}
+
+.status-badge.dispatched {
+  background: #fff0de;
+  color: #b36b15;
+}
+
+.status-badge.completed {
+  background: #ddf5e7;
+  color: #1e7a47;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.info-tile {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f9fbff;
+  border: 1px solid #e5ebf4;
+}
+
+.info-tile.emphasis {
+  background: linear-gradient(135deg, #edf4ff 0%, #ffffff 100%);
+  border-color: #d8e5fb;
+}
+
+.info-tile span {
+  color: #6d80a3;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.info-tile strong {
+  color: #223a66;
+  font-size: 1.2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.field {
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 16px;
+  border-top: 1px solid #edf1f7;
+}
+
+.dispatch-note {
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #e8f7ee;
+  color: #1f6b42;
+  font-size: 0.92rem;
+}
+
+.dispatch-note.disabled {
+  background: #edf1f7;
+  color: #64748b;
+}
+
+.footer button {
+  min-height: 42px;
+  border-radius: 8px;
+}
+
+.footer .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: currentColor;
+  margin-right: 8px;
+}
+
+@media (max-width: 960px) {
+  .info-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

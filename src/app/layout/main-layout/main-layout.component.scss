@@ -1,0 +1,28 @@
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #eef2f9 0%, #edf1f8 100%);
+}
+
+.sidebar {
+  width: 270px;
+  border-right: 1px solid rgba(78, 102, 165, 0.08);
+  box-shadow: 12px 0 32px rgba(37, 59, 116, 0.08);
+}
+
+.content {
+  min-height: calc(100vh - 72px);
+  padding: 28px 32px 32px;
+  background:
+    radial-gradient(circle at top left, rgba(67, 109, 226, 0.1), transparent 24%),
+    linear-gradient(180deg, #f7f9fd 0%, #edf1f8 100%);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 244px;
+  }
+
+  .content {
+    padding: 20px 16px 24px;
+  }
+}

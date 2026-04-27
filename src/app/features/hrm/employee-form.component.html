@@ -1,0 +1,134 @@
+<section class="drawer-shell">
+  <header class="drawer-header">
+    <div>
+      <h2>{{ employee ? 'Edit Employee' : 'Add Employee' }}</h2>
+      <p>Capture personal, job, and salary details for workforce records.</p>
+    </div>
+
+    <button mat-icon-button type="button" aria-label="Close drawer" (click)="closeDrawer.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <form class="drawer-body" [formGroup]="form">
+    <section class="section-block">
+      <h3>Personal Details</h3>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" />
+          <mat-error *ngIf="form.controls.firstName.hasError('required')">First name is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" />
+          <mat-error *ngIf="form.controls.lastName.hasError('required')">Last name is required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="form.controls.email.hasError('required')">Email is required.</mat-error>
+        <mat-error *ngIf="form.controls.email.hasError('email')">Enter a valid email address.</mat-error>
+      </mat-form-field>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="phone" />
+          <mat-error *ngIf="form.controls.phone.hasError('required')">Phone is required.</mat-error>
+          <mat-error *ngIf="form.controls.phone.hasError('pattern')">Enter a valid 10 digit phone number.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Date of Birth</mat-label>
+          <input matInput type="date" formControlName="dob" />
+          <mat-error *ngIf="form.controls.dob.hasError('required')">Date of birth is required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option *ngFor="let option of genderOptions" [value]="option">{{ option }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <section class="section-block">
+      <h3>Job Details</h3>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Employee ID</mat-label>
+          <input matInput formControlName="employeeId" />
+          <mat-error *ngIf="form.controls.employeeId.hasError('required')">Employee ID is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Joining Date</mat-label>
+          <input matInput type="date" formControlName="joiningDate" />
+          <mat-error *ngIf="form.controls.joiningDate.hasError('required')">Joining date is required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="department">
+          <mat-option *ngFor="let department of departments" [value]="department">{{ department }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls.department.hasError('required')">Department is required.</mat-error>
+      </mat-form-field>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Designation</mat-label>
+          <input matInput formControlName="designation" />
+          <mat-error *ngIf="form.controls.designation.hasError('required')">Designation is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let option of statusOptions" [value]="option">{{ option | titlecase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <h3>Salary Details</h3>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Basic Salary</mat-label>
+          <input matInput type="number" formControlName="basicSalary" />
+          <mat-error *ngIf="form.controls.basicSalary.hasError('required')">Basic salary is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Allowances</mat-label>
+          <input matInput type="number" formControlName="allowances" />
+          <mat-error *ngIf="form.controls.allowances.hasError('required')">Allowances are required.</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Bank Account</mat-label>
+        <input matInput formControlName="bankAccount" />
+        <mat-error *ngIf="form.controls.bankAccount.hasError('required')">Bank account is required.</mat-error>
+      </mat-form-field>
+    </section>
+  </form>
+
+  <footer class="drawer-footer">
+    <button mat-button type="button" (click)="closeDrawer.emit()">Cancel</button>
+    <button mat-flat-button color="primary" type="button" (click)="submit()" [disabled]="saving">
+      <mat-spinner *ngIf="saving" diameter="18"></mat-spinner>
+      <span>Save</span>
+    </button>
+  </footer>
+</section>

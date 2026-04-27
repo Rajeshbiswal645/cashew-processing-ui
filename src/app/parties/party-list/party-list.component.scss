@@ -1,0 +1,45 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    min-width: 150px;
+  }
+
+  button {
+    align-self: center;
+    height: 36px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.w-250 { width: 250px; }
+.w-200 { width: 200px; }
+
+.active-chip {
+  background-color: green;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.inactive-chip {
+  background-color: red;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+}

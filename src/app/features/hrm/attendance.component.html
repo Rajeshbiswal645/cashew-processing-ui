@@ -1,0 +1,80 @@
+<section class="hrm-page">
+  <header class="page-header">
+    <div>
+      <h1>Attendance</h1>
+      <p>Track daily attendance and update present or absent status</p>
+    </div>
+  </header>
+
+  <section class="card table-card">
+    <div class="loading-state" *ngIf="isLoading; else attendanceTable">
+      <mat-spinner diameter="42"></mat-spinner>
+      <p>Loading attendance records...</p>
+    </div>
+  </section>
+</section>
+
+<ng-template #attendanceTable>
+  <div class="table-wrap" *ngIf="!emptyState; else emptyStateTpl">
+    <table mat-table [dataSource]="dataSource" class="erp-table">
+      <ng-container matColumnDef="employeeName">
+        <th mat-header-cell *matHeaderCellDef>Employee Name</th>
+        <td mat-cell *matCellDef="let record">
+          <div class="primary-cell">
+            <strong>{{ record.employeeName }}</strong>
+            <span>{{ record.employeeId }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let record">{{ record.date }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let record">
+          <span class="status-badge" [ngClass]="statusClass(record.status)">{{ record.status | titlecase }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let record">
+          <div class="actions-cell">
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="updatingRecordId === record.id"
+              (click)="markStatus(record, 'PRESENT')"
+            >
+              Present
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="updatingRecordId === record.id"
+              (click)="markStatus(record, 'ABSENT')"
+            >
+              Absent
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</ng-template>
+
+<ng-template #emptyStateTpl>
+  <div class="empty-state">
+    <mat-icon>event_busy</mat-icon>
+    <p>No attendance records available.</p>
+  </div>
+</ng-template>

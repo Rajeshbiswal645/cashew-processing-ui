@@ -1,0 +1,15 @@
+:host { display: block; }
+.generate-page { display: grid; gap: 20px; min-height: 100%; background: #f5f7fb; }
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.page-header h1 { margin: 0; font-size: 1.95rem; font-weight: 600; color: #213860; }
+.page-header p { margin: 6px 0 0; color: #6f83a7; }
+.card { background: #fff; border-radius: 10px; border: 1px solid #e5ebf4; box-shadow: 0 8px 24px rgba(26,52,104,.06); }
+.form-card { padding: 24px; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 320px)); gap: 16px; }
+.form-footer { display: flex; justify-content: flex-end; margin-top: 8px; }
+.form-footer button { min-height: 42px; border-radius: 8px; }
+.form-footer .mat-mdc-progress-spinner { --mdc-circular-progress-active-indicator-color: currentColor; margin-right: 8px; }
+@media (max-width: 960px) {
+  .page-header { flex-direction: column; align-items: stretch; }
+  .form-grid { grid-template-columns: 1fr; }
+}

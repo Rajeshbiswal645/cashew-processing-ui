@@ -1,0 +1,13 @@
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  &.pending { background: #ffea00; color: #333; }
+  &.processed { background: #4caf50; color: #fff; }
+  &.completed { background: #2196f3; color: #fff; }
+  &.rejected { background: #f44336; color: #fff; }
+  &.approved { background: #4caf50; color: #fff; }
+  &.failed { background: #f44336; color: #fff; }
+}

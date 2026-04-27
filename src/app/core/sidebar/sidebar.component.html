@@ -1,0 +1,24 @@
+<aside class="erp-sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-badge">C</div>
+    <div class="brand-copy">
+      <span class="brand-name">Cashew ERP</span>
+      <span class="brand-subtitle">Factory Suite</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let link of primaryLinks"
+      class="nav-item"
+      [routerLink]="link.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: link.route === '/dashboard' }"
+    >
+      <mat-icon>{{ link.icon }}</mat-icon>
+      <span>{{ link.label }}</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-cashew" aria-hidden="true"></div>
+</aside>

@@ -1,0 +1,96 @@
+<section class="processing-pipeline-page">
+  <header class="page-header">
+    <div class="header-copy">
+      <h1>Processing Pipeline</h1>
+      <p class="subtitle">Factory production workflow</p>
+    </div>
+  </header>
+
+  <ng-container *ngIf="!isLoading; else loadingState">
+    <section class="pipeline-board" *ngIf="hasData && pipeline; else emptyState">
+      <mat-drawer-container class="pipeline-shell" autosize>
+        <mat-drawer-content>
+          <section
+            class="pipeline-layout"
+            [style.--stage-count]="pipeline.stages.length"
+            [style.--active-stage-column]="expandedStageIndex + 1"
+          >
+            <section class="stage-track">
+              <div
+                class="stage-slot"
+                *ngFor="let stage of pipeline.stages; trackBy: trackStage; let last = last"
+                [class.is-expanded]="isStageExpanded(stage)"
+              >
+                <app-stage-card
+                  [stage]="stage"
+                  [active]="stage.status === 'IN_PROGRESS'"
+                  [expanded]="isStageExpanded(stage)"
+                  (stageSelect)="toggleStage(stage)"
+                ></app-stage-card>
+
+                <div class="stage-link" *ngIf="!last" aria-hidden="true">
+                  <span></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="jobs-stage" *ngIf="expandedStage as stage">
+              <header class="jobs-stage-header">
+                <div>
+                  <p class="jobs-eyebrow">Parallel Jobs</p>
+                  <h2>{{ expandedStageTitle }}</h2>
+                </div>
+                <div class="jobs-stage-meta">
+                  <span class="jobs-count">{{ stage.jobs.length }} batches</span>
+                  <span class="jobs-status" [ngClass]="stage.status.toLowerCase().replace('_', '-')">
+                    {{ stage.status === 'IN_PROGRESS' ? 'Running' : stage.status === 'COMPLETED' ? 'Completed' : 'Pending' }}
+                  </span>
+                </div>
+              </header>
+
+              <div class="jobs-grid" [class.locked]="!stage.enabled">
+                <app-job-card
+                  *ngFor="let job of stage.jobs; trackBy: trackJob"
+                  [job]="job"
+                  [disabled]="!stage.enabled"
+                  [selected]="selectedJob?.id === job.id"
+                  (jobSelect)="openJob(stage, job)"
+                ></app-job-card>
+              </div>
+
+              <div class="locked-message" *ngIf="!stage.enabled">
+                Complete the previous stage to unlock {{ stage.name }} jobs.
+              </div>
+            </section>
+          </section>
+        </mat-drawer-content>
+
+        <mat-drawer class="job-drawer-host" mode="side" position="end" [opened]="drawerOpened">
+          <app-job-drawer
+            *ngIf="selectedStage && selectedJob"
+            [stage]="selectedStage"
+            [job]="selectedJob"
+            [saving]="isSaving"
+            (closeDrawer)="closeDrawer()"
+            (saveDraft)="saveJobDraft($event)"
+            (startJob)="startJob($event)"
+            (completeJob)="completeJob($event)"
+          ></app-job-drawer>
+        </mat-drawer>
+      </mat-drawer-container>
+    </section>
+  </ng-container>
+</section>
+
+<ng-template #loadingState>
+  <section class="loading-state">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading processing pipeline...</p>
+  </section>
+</ng-template>
+
+<ng-template #emptyState>
+  <section class="empty-state">
+    <p>No processing batches available</p>
+  </section>
+</ng-template>

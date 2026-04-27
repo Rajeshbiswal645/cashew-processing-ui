@@ -1,0 +1,67 @@
+<section class="card step-card" *ngIf="order as currentOrder">
+  <header class="card-header">
+    <div>
+      <h2>Dispatch</h2>
+      <p>Confirm transport details and move allocated stock out of inventory.</p>
+    </div>
+    <span class="status-badge" [ngClass]="currentOrder.status.toLowerCase()">{{ currentOrder.status | titlecase }}</span>
+  </header>
+
+  <div class="info-grid">
+    <article class="info-tile">
+      <span>Sales Order ID</span>
+      <strong>{{ currentOrder.id }}</strong>
+    </article>
+    <article class="info-tile">
+      <span>Buyer</span>
+      <strong>{{ currentOrder.buyerName }}</strong>
+    </article>
+    <article class="info-tile emphasis">
+      <span>Allocated Quantity</span>
+      <strong>{{ currentOrder.allocatedQuantity | number:'1.0-1' }} kg</strong>
+    </article>
+  </div>
+
+  <form class="form-grid" [formGroup]="form">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Truck ID</mat-label>
+      <input matInput formControlName="truckId" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Driver Name</mat-label>
+      <input matInput formControlName="driverName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Driver Phone</mat-label>
+      <input matInput formControlName="driverPhone" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Destination</mat-label>
+      <input matInput formControlName="destination" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Actual Weight</mat-label>
+      <input matInput type="number" formControlName="actualWeight" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Dispatch Date</mat-label>
+      <input matInput type="date" formControlName="dispatchDate" />
+    </mat-form-field>
+  </form>
+
+  <div class="footer">
+    <div class="dispatch-note" [class.disabled]="currentOrder.status !== 'ALLOCATED'">
+      {{ currentOrder.status === 'ALLOCATED' ? 'Inventory will be deducted on dispatch confirmation.' : 'Dispatch unlocks after stock allocation.' }}
+    </div>
+
+    <button mat-flat-button color="primary" type="button" (click)="submit()" [disabled]="!canDispatch">
+      <mat-spinner *ngIf="saving" diameter="18"></mat-spinner>
+      <span>Confirm Dispatch</span>
+    </button>
+  </div>
+</section>

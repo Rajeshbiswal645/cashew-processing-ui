@@ -1,0 +1,68 @@
+<div class="page-header">
+  <h2>Invoice List</h2>
+  <button mat-raised-button color="primary" (click)="openCreate()">
+    <mat-icon>add</mat-icon> New Invoice
+  </button>
+</div>
+
+<div class="filter-row">
+  <mat-form-field appearance="outline" class="w-250">
+    <mat-label>Search Invoice / Customer</mat-label>
+    <input matInput [(ngModel)]="searchText">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-200">
+    <mat-label>Status</mat-label>
+    <mat-select [(ngModel)]="filterStatus">
+      <mat-option value="">All</mat-option>
+      <mat-option value="PAID">PAID</mat-option>
+      <mat-option value="PENDING">PENDING</mat-option>
+      <mat-option value="OVERDUE">OVERDUE</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<table mat-table [dataSource]="filteredInvoices" class="full-width mat-elevation-z2">
+
+  <ng-container matColumnDef="invoice_no">
+    <th mat-header-cell *matHeaderCellDef>Invoice No</th>
+    <td mat-cell *matCellDef="let row">{{ row.invoice_no }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="customer">
+    <th mat-header-cell *matHeaderCellDef>Customer</th>
+    <td mat-cell *matCellDef="let row">{{ row.customer }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="invoice_date">
+    <th mat-header-cell *matHeaderCellDef>Date</th>
+    <td mat-cell *matCellDef="let row">{{ row.invoice_date | date }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="amount">
+    <th mat-header-cell *matHeaderCellDef>Amount</th>
+    <td mat-cell *matCellDef="let row">₹{{ row.total_amount }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let row">
+      <button mat-icon-button color="primary" (click)="openEdit(row)">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn" (click)="deleteInvoice(row)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>

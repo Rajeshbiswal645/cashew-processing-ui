@@ -1,0 +1,233 @@
+<section class="party-page">
+  <header class="hero-card">
+    <div class="hero-copy">
+      <p class="eyebrow">Parties</p>
+      <h1>Vendor & Buyers</h1>
+      <p>
+        Manage procurement vendors and sales buyers from one reusable party workflow with complete CRUD and API-backed data handling.
+      </p>
+    </div>
+
+    <button mat-flat-button color="primary" type="button" class="hero-action" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Add {{ selectedCategory }}
+    </button>
+  </header>
+
+  <div class="workspace-grid">
+    <section class="workspace-panel">
+      <div class="tab-strip">
+        <button
+          *ngFor="let tab of tabs"
+          type="button"
+          class="tab-button"
+          [class.active]="selectedCategory === tab"
+          (click)="setCategory(tab)"
+        >
+          {{ tab }}s
+        </button>
+      </div>
+
+      <form class="filters-card" [formGroup]="filterForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Search by name</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput formControlName="search" placeholder="Global Traders" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Filter by Type</mat-label>
+          <mat-select formControlName="classification">
+            <mat-option *ngFor="let option of classificationOptions" [value]="option">{{ option }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Filter by Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="All">All</mat-option>
+            <mat-option *ngFor="let option of statusOptions" [value]="option">{{ option }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+
+      <div class="table-card" *ngIf="!loading; else loadingState">
+        <div class="table-header">
+          <span>Name</span>
+          <span>Type</span>
+          <span>Origin</span>
+          <span>GST</span>
+          <span>Rating</span>
+          <span>Status</span>
+        </div>
+
+        <button
+          *ngFor="let party of filteredParties; trackBy: trackByParty"
+          type="button"
+          class="table-row"
+          [class.selected]="selectedParty?.id === party.id"
+          (click)="selectParty(party)"
+        >
+          <div class="cell primary" data-label="Name">
+            <strong>{{ party.uniqueName }}</strong>
+            <span>{{ party.legalName }}</span>
+          </div>
+          <div class="cell" data-label="Type">{{ party.category }}</div>
+          <div class="cell" data-label="Origin">{{ party.origin.join(', ') || 'Not provided' }}</div>
+          <div class="cell" data-label="GST">{{ party.gstin || 'Not provided' }}</div>
+          <div class="cell rating-cell" data-label="Rating">
+            <mat-icon *ngFor="let icon of getRatingStars(party)">{{ icon }}</mat-icon>
+          </div>
+          <div class="cell status-cell" data-label="Status">
+            <span class="status-pill" [class.inactive]="party.status === 'Inactive'" [class.pending]="party.status === 'Pending Review'">
+              {{ party.status }}
+            </span>
+          </div>
+        </button>
+
+        <div class="empty-state" *ngIf="!filteredParties.length">
+          <mat-icon>inventory_2</mat-icon>
+          <h3>No {{ selectedCategory.toLowerCase() }}s found</h3>
+          <p>Adjust filters or add a new {{ selectedCategory.toLowerCase() }} to get started.</p>
+        </div>
+      </div>
+
+      <mat-card class="activity-card" *ngIf="selectedParty">
+        <div class="section-title">
+          <h2>Recent Activity</h2>
+        </div>
+
+        <div class="activity-list">
+          <article class="activity-item" *ngFor="let item of selectedParty.activity">
+            <div class="activity-icon">
+              <mat-icon>{{ item.icon }}</mat-icon>
+            </div>
+            <div class="activity-copy">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.detail }}</span>
+            </div>
+            <time>{{ item.time }}</time>
+          </article>
+        </div>
+      </mat-card>
+    </section>
+
+    <aside class="details-panel" *ngIf="selectedParty as party">
+      <div class="details-header">
+        <div>
+          <p class="eyebrow">{{ party.category }} Details</p>
+          <h2>{{ party.uniqueName }}</h2>
+        </div>
+
+        <button mat-icon-button [matMenuTriggerFor]="partyMenu" aria-label="Party actions">
+          <mat-icon>more_horiz</mat-icon>
+        </button>
+      </div>
+
+      <mat-menu #partyMenu="matMenu">
+        <button mat-menu-item type="button" (click)="editParty(party)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit {{ party.category }}</span>
+        </button>
+        <button mat-menu-item type="button" (click)="deleteParty(party)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete {{ party.category }}</span>
+        </button>
+      </mat-menu>
+
+      <div class="details-section">
+        <h3>{{ party.code }}</h3>
+        <dl class="detail-grid">
+          <div>
+            <dt>Type</dt>
+            <dd>{{ party.category }}</dd>
+          </div>
+          <div>
+            <dt>Classification</dt>
+            <dd>{{ party.classification }}</dd>
+          </div>
+          <div>
+            <dt>Origin</dt>
+            <dd>{{ party.origin.join(', ') || 'Not provided' }}</dd>
+          </div>
+          <div>
+            <dt>GSTIN</dt>
+            <dd>{{ party.gstin || 'Not provided' }}</dd>
+          </div>
+          <div>
+            <dt>Phone</dt>
+            <dd>{{ party.phone }}</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd>{{ party.email }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="details-section">
+        <div class="contract-row">
+          <div>
+            <h3>Contracts</h3>
+            <p>{{ party.contract.title }}</p>
+          </div>
+          <span class="contract-pill" [class.draft]="party.contract.status === 'Draft'" [class.expired]="party.contract.status === 'Expired'">
+            {{ party.contract.status }}
+          </span>
+        </div>
+
+        <dl class="detail-grid compact">
+          <div>
+            <dt>ID</dt>
+            <dd>{{ party.contract.reference }}</dd>
+          </div>
+          <div>
+            <dt>Contact</dt>
+            <dd>{{ party.contactPerson }}</dd>
+          </div>
+          <div>
+            <dt>Notes</dt>
+            <dd>{{ party.notes || 'No internal notes added yet.' }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="details-section">
+        <h3>Bank</h3>
+        <dl class="detail-grid compact">
+          <div>
+            <dt>Bank</dt>
+            <dd>{{ party.bankDetails.bankName || 'Not provided' }}</dd>
+          </div>
+          <div>
+            <dt>Account Name</dt>
+            <dd>{{ party.bankDetails.accountName || 'Not provided' }}</dd>
+          </div>
+          <div>
+            <dt>Account Number</dt>
+            <dd>{{ party.bankDetails.accountNumber || 'Not provided' }}</dd>
+          </div>
+          <div>
+            <dt>IFSC</dt>
+            <dd>{{ party.bankDetails.ifscCode || 'Not provided' }}</dd>
+          </div>
+        </dl>
+      </div>
+    </aside>
+  </div>
+
+  <div class="busy-indicator" *ngIf="actionInProgress">
+    <mat-spinner diameter="34"></mat-spinner>
+  </div>
+</section>
+
+<ng-template #loadingState>
+  <div class="loading-card">
+    <mat-spinner diameter="42"></mat-spinner>
+    <p>Loading party records...</p>
+  </div>
+</ng-template>

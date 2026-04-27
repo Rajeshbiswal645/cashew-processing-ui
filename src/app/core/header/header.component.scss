@@ -1,0 +1,105 @@
+.erp-toolbar {
+  min-height: 72px;
+  padding: 0 24px 0 18px;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  background: linear-gradient(90deg, #2f5cc6 0%, #3c6ee1 45%, #4579ea 100%);
+  box-shadow: 0 10px 24px rgba(42, 78, 170, 0.22);
+}
+
+.toolbar-brand,
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-brand {
+  gap: 12px;
+}
+
+.toolbar-title {
+  font-size: 1.9rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.toolbar-actions {
+  gap: 12px;
+}
+
+.logout-button {
+  min-height: 42px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.user-chip {
+  padding: 4px 10px 4px 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2f5cc6;
+  background: linear-gradient(180deg, #fff4e4, #f1d4aa);
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.user-role {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 768px) {
+  .erp-toolbar {
+    min-height: 64px;
+    padding-inline: 12px;
+  }
+
+  .toolbar-title {
+    font-size: 1.4rem;
+  }
+
+  .user-meta {
+    display: none;
+  }
+
+  .logout-button span {
+    display: none;
+  }
+}

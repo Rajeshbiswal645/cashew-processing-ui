@@ -1,0 +1,63 @@
+<section class="card step-card" *ngIf="process as currentProcess">
+  <header class="card-header">
+    <div>
+      <h2>Boiling Step</h2>
+      <p>Capture kettle operation details before cutting begins.</p>
+    </div>
+    <span class="status-badge" [ngClass]="currentProcess.boiling.status.toLowerCase().replace('_', '-')">
+      {{ currentProcess.boiling.status === 'IN_PROGRESS' ? 'In Progress' : (currentProcess.boiling.status | titlecase) }}
+    </span>
+  </header>
+
+  <form class="form-grid" [formGroup]="form">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Input Weight (kg)</mat-label>
+      <input matInput formControlName="inputWeight" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Start Time</mat-label>
+      <input matInput type="datetime-local" formControlName="startTime" />
+      <mat-error *ngIf="form.controls.startTime.hasError('required')">Start time is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>End Time</mat-label>
+      <input matInput type="datetime-local" formControlName="endTime" />
+      <mat-error *ngIf="form.controls.endTime.hasError('required')">End time is required to complete boiling.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Temperature (°C)</mat-label>
+      <input matInput type="number" formControlName="temperature" />
+      <mat-error *ngIf="form.controls.temperature.hasError('required')">Temperature is required.</mat-error>
+      <mat-error *ngIf="form.controls.temperature.hasError('min') || form.controls.temperature.hasError('max')">
+        Use a value between 80°C and 130°C.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field full-width">
+      <mat-label>Operator</mat-label>
+      <input matInput formControlName="operator" />
+      <mat-error *ngIf="form.controls.operator.hasError('required')">Operator is required.</mat-error>
+    </mat-form-field>
+  </form>
+
+  <div class="footer">
+    <div class="info-chip" *ngIf="currentProcess.boiling.outputWeight">
+      Boiling output: <strong>{{ currentProcess.boiling.outputWeight | number:'1.1-1' }} kg</strong>
+    </div>
+
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="submitStart()" [disabled]="!canStart">
+        <mat-spinner *ngIf="saving && canStart" diameter="18"></mat-spinner>
+        <span>Start Boiling</span>
+      </button>
+
+      <button mat-flat-button color="primary" type="button" (click)="submitComplete()" [disabled]="!canComplete">
+        <mat-spinner *ngIf="saving && canComplete" diameter="18"></mat-spinner>
+        <span>Complete Boiling</span>
+      </button>
+    </div>
+  </div>
+</section>

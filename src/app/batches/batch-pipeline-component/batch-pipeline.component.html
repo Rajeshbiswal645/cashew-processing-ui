@@ -1,0 +1,110 @@
+<div class="pipeline-wrapper">
+  <h2>Cashew Processing Pipeline</h2>
+
+  <div class="pipeline-flow">
+    <!-- RCN -->
+    <div class="stage-card">
+      <div class="stage-header" (click)="toggleStage('rcn')">
+        <div class="title">
+          <mat-icon>grain</mat-icon> RCN
+        </div>
+        <div class="meta">{{counts.rcn}} batches</div>
+        <mat-icon class="arrow" [class.expanded]="expandedStage === 'rcn'">expand_more</mat-icon>
+      </div>
+      <div class="stage-content" *ngIf="expandedStage === 'rcn'">
+        <app-rcn-batch></app-rcn-batch>
+      </div>
+      <div class="connector"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+
+    <!-- Boiling -->
+    <div class="stage-card">
+      <div class="stage-header" (click)="toggleStage('boiling')">
+        <div class="title">
+          <mat-icon>local_fire_department</mat-icon> Boiling
+        </div>
+        <div class="meta">{{counts.boiling}} batches</div>
+        <mat-icon class="arrow" [class.expanded]="expandedStage === 'boiling'">expand_more</mat-icon>
+      </div>
+      <div class="stage-content" *ngIf="expandedStage === 'boiling'">
+        <app-boiling-batch></app-boiling-batch>
+      </div>
+      <div class="connector"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+
+    <!-- Cutting -->
+    <div class="stage-card">
+      <div class="stage-header" (click)="toggleStage('cutting')">
+        <div class="title">
+          <mat-icon>content_cut</mat-icon> Cutting
+        </div>
+        <div class="meta">{{counts.cutting}} batches</div>
+        <mat-icon class="arrow" [class.expanded]="expandedStage === 'cutting'">expand_more</mat-icon>
+      </div>
+      <div class="stage-content" *ngIf="expandedStage === 'cutting'">
+        <app-cutting-batch></app-cutting-batch>
+      </div>
+      <div class="connector"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+
+    <!-- Kernel -->
+    <div class="stage-card">
+      <div class="stage-header" (click)="toggleStage('kernel')">
+        <div class="title">
+          <mat-icon>spa</mat-icon> Kernel
+        </div>
+        <div class="meta">{{counts.kernel}} batches</div>
+        <mat-icon class="arrow" [class.expanded]="expandedStage === 'kernel'">expand_more</mat-icon>
+      </div>
+      <div class="stage-content" *ngIf="expandedStage === 'kernel'">
+        <app-kernel-batch></app-kernel-batch>
+      </div>
+      <div class="connector"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+
+    <!-- Peeling -->
+    <div class="stage-card">
+      <div class="stage-header" (click)="toggleStage('peeling')">
+        <div class="title">
+          <mat-icon>layers</mat-icon> Peeling
+        </div>
+        <div class="meta">{{counts.peeling}} batches</div>
+        <mat-icon class="arrow" [class.expanded]="expandedStage === 'peeling'">expand_more</mat-icon>
+      </div>
+      <div class="stage-content" *ngIf="expandedStage === 'peeling'">
+        <app-peeling-batch></app-peeling-batch>
+      </div>
+      <div class="connector"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+
+    <!-- Sorting -->
+    <div class="stage-card">
+      <div class="stage-header" (click)="toggleStage('sorting')">
+        <div class="title">
+          <mat-icon>sort</mat-icon> Sorting
+        </div>
+        <div class="meta">{{counts.sorting}} batches</div>
+        <mat-icon class="arrow" [class.expanded]="expandedStage === 'sorting'">expand_more</mat-icon>
+      </div>
+      <div class="stage-content" *ngIf="expandedStage === 'sorting'">
+        <app-sorting-batch></app-sorting-batch>
+      </div>
+      <div class="connector"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+
+    <!-- Packing -->
+    <div class="stage-card">
+      <div class="stage-header" (click)="toggleStage('packing')">
+        <div class="title">
+          <mat-icon>inventory_2</mat-icon> Packing
+        </div>
+        <div class="meta">{{counts.packing}} batches</div>
+        <mat-icon class="arrow" [class.expanded]="expandedStage === 'packing'">expand_more</mat-icon>
+      </div>
+      <div class="stage-content" *ngIf="expandedStage === 'packing'">
+        <app-packing-batch></app-packing-batch>
+      </div>
+      <div class="connector"><mat-icon>arrow_downward</mat-icon></div>
+    </div>
+  </div>
+</div>
