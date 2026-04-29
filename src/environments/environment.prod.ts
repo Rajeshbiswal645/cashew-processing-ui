@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: '/api'
+  baseUrl: 'https://java-cashew-processing-unit.onrender.com/api'
 };
